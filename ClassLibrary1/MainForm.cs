@@ -112,6 +112,11 @@ namespace Calculers
                 //LayerC.Items.Add(layers);
 
                 LayerC.DataSource = layers;
+                foreach (string layer in layers)
+                {
+                    checkedListBox1.Items.Add(layer);
+                }
+                
 
             }
         }

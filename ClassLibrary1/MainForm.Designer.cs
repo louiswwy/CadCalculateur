@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            //this.LineList = new System.Windows.Forms.ListBox();
             this.LayerC = new System.Windows.Forms.ComboBox();
             this.ButtonM = new System.Windows.Forms.Button();
             this.ButtonV = new System.Windows.Forms.Button();
@@ -36,20 +35,17 @@
             this.formule = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // listLine
-            // 
-            /*this.LineList.FormattingEnabled = true;
-            this.LineList.Location = new System.Drawing.Point(12, 12);
-            this.LineList.Name = "listLine";
-            this.LineList.Size = new System.Drawing.Size(168, 43);
-            this.LineList.TabIndex = 0;*/
             // 
             // LayerC
             // 
             this.LayerC.FormattingEnabled = true;
-            this.LayerC.Location = new System.Drawing.Point(225, 32);
+            this.LayerC.Location = new System.Drawing.Point(241, 35);
             this.LayerC.Name = "LayerC";
             this.LayerC.Size = new System.Drawing.Size(121, 21);
             this.LayerC.TabIndex = 1;
@@ -58,7 +54,7 @@
             // ButtonM
             // 
             this.ButtonM.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonM.Location = new System.Drawing.Point(225, 76);
+            this.ButtonM.Location = new System.Drawing.Point(241, 79);
             this.ButtonM.Name = "ButtonM";
             this.ButtonM.Size = new System.Drawing.Size(75, 23);
             this.ButtonM.TabIndex = 2;
@@ -67,7 +63,7 @@
             // 
             // ButtonV
             // 
-            this.ButtonV.Location = new System.Drawing.Point(225, 116);
+            this.ButtonV.Location = new System.Drawing.Point(241, 119);
             this.ButtonV.Name = "ButtonV";
             this.ButtonV.Size = new System.Drawing.Size(75, 23);
             this.ButtonV.TabIndex = 3;
@@ -77,7 +73,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(222, 12);
+            this.label1.Location = new System.Drawing.Point(238, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 4;
@@ -85,7 +81,7 @@
             // 
             // formule
             // 
-            this.formule.Location = new System.Drawing.Point(225, 172);
+            this.formule.Location = new System.Drawing.Point(241, 175);
             this.formule.Multiline = true;
             this.formule.Name = "formule";
             this.formule.Size = new System.Drawing.Size(121, 114);
@@ -94,7 +90,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(222, 142);
+            this.label2.Location = new System.Drawing.Point(238, 145);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(91, 13);
             this.label2.TabIndex = 6;
@@ -102,30 +98,54 @@
             // 
             // treeView1
             // 
-            this.treeView1.Location = new System.Drawing.Point(12, 61);
+            this.treeView1.Location = new System.Drawing.Point(28, 64);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(168, 97);
             this.treeView1.TabIndex = 7;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.checkedListBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.treeView1);
+            this.splitContainer1.Panel1.Controls.Add(this.LayerC);
+            this.splitContainer1.Panel1.Controls.Add(this.label2);
+            this.splitContainer1.Panel1.Controls.Add(this.ButtonM);
+            this.splitContainer1.Panel1.Controls.Add(this.formule);
+            this.splitContainer1.Panel1.Controls.Add(this.ButtonV);
+            this.splitContainer1.Panel1.Controls.Add(this.label1);
+            this.splitContainer1.Size = new System.Drawing.Size(742, 481);
+            this.splitContainer1.SplitterDistance = 659;
+            this.splitContainer1.TabIndex = 8;
+            // 
+            // checkedListBox1
+            // 
+            this.checkedListBox1.FormattingEnabled = true;
+            this.checkedListBox1.Location = new System.Drawing.Point(28, 175);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(120, 94);
+            this.checkedListBox1.TabIndex = 8;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(388, 298);
-            this.Controls.Add(this.treeView1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.formule);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.ButtonV);
-            this.Controls.Add(this.ButtonM);
-            this.Controls.Add(this.LayerC);
-            //this.Controls.Add(this.LineList);
+            this.ClientSize = new System.Drawing.Size(742, 481);
+            this.Controls.Add(this.splitContainer1);
             this.Name = "MainForm";
             this.Text = "MainForm";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -139,5 +159,7 @@
         private System.Windows.Forms.TextBox formule;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.CheckedListBox checkedListBox1;
     }
 }
