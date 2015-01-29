@@ -61,6 +61,7 @@ namespace Calculers
                         // Save the new object to the database
                         acTrans.Commit();
                     }
+                    else { return; }
                 }
                 catch (Autodesk.AutoCAD.Runtime.Exception ex)
                 {
