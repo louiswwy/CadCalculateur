@@ -14,20 +14,20 @@ namespace Calculers
 {
     public class CalculerLine
     {
-        public List<Line> listEntitys
+        /*public List<Line> listEntitys
         {
             get;
             set;
-        }
+        }*/
 
         [CommandMethod("Calculateur")]
         public void ModalDialog()
         {
             // Get the current document and database
-            
-            Document acDoc = Application.DocumentManager.MdiActiveDocument;
+            /*Document acDoc = Application.DocumentManager.MdiActiveDocument;
             Database acCurDb = acDoc.Database;
             Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+            DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
             // Start a transaction
             using (Transaction acTrans = acCurDb.TransactionManager.StartTransaction())
             {
@@ -48,14 +48,14 @@ namespace Calculers
                             {
                                 // Open the selected object for write
                                 Line acEnt = acTrans.GetObject(acSSObj.ObjectId,
-                                                       OpenMode.ForRead) as Line;
+                                                       OpenMode.ForWrite) as Line;
 
                                 //listEntitys.Add(acEnt);  //导致cad程序崩溃.
-                                //if (acEnt != null)
-                                //{
-                                    // Change the object's color to Green
-                                //    acEnt.ColorIndex = 3;
-                                //}
+                                if (acEnt != null)
+                                {
+                                    //Change the object's color to Green
+                                    acEnt.ColorIndex = 3;
+                                }
                             }
                         }
                         // Save the new object to the database
@@ -65,11 +65,13 @@ namespace Calculers
                 }
                 catch (Autodesk.AutoCAD.Runtime.Exception ex)
                 {
-                    ed.WriteMessage(ex.Message + "\n");
+                    ed.WriteMessage("出错了!,错误信息: >" + ex.Message + "<\n");
                 }
-            }
+            }*/
             MainForm form = new MainForm();     //创建对话框
-            Application.ShowModalDialog(form);  //显示模态对话框
+            Application.ShowModelessDialog(form);  //显示非模态对话框
+            //m_DocumentLock.Dispose();
+            
             
         }
     }

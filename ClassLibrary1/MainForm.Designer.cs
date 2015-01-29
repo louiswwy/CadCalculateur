@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.LayerC = new System.Windows.Forms.ComboBox();
+            this.Combobox_Layer = new System.Windows.Forms.ComboBox();
             this.ButtonM = new System.Windows.Forms.Button();
             this.ButtonV = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -36,25 +36,27 @@
             this.label2 = new System.Windows.Forms.Label();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.checkedListBox_Layer = new System.Windows.Forms.CheckedListBox();
+            this.buttonSelec = new System.Windows.Forms.Button();
+            this.B_ReloadLayer = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // LayerC
+            // Combobox_Layer
             // 
-            this.LayerC.FormattingEnabled = true;
-            this.LayerC.Location = new System.Drawing.Point(241, 35);
-            this.LayerC.Name = "LayerC";
-            this.LayerC.Size = new System.Drawing.Size(121, 21);
-            this.LayerC.TabIndex = 1;
-            this.LayerC.SelectionChangeCommitted += new System.EventHandler(this.LayerC_SelectionChangeCommitted);
+            this.Combobox_Layer.FormattingEnabled = true;
+            this.Combobox_Layer.Location = new System.Drawing.Point(241, 35);
+            this.Combobox_Layer.Name = "Combobox_Layer";
+            this.Combobox_Layer.Size = new System.Drawing.Size(121, 21);
+            this.Combobox_Layer.TabIndex = 1;
+            this.Combobox_Layer.SelectionChangeCommitted += new System.EventHandler(this.LayerC_SelectionChangeCommitted);
             // 
             // ButtonM
             // 
             this.ButtonM.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonM.Location = new System.Drawing.Point(241, 79);
+            this.ButtonM.Location = new System.Drawing.Point(343, 83);
             this.ButtonM.Name = "ButtonM";
             this.ButtonM.Size = new System.Drawing.Size(75, 23);
             this.ButtonM.TabIndex = 2;
@@ -111,9 +113,11 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.checkedListBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.B_ReloadLayer);
+            this.splitContainer1.Panel1.Controls.Add(this.buttonSelec);
+            this.splitContainer1.Panel1.Controls.Add(this.checkedListBox_Layer);
             this.splitContainer1.Panel1.Controls.Add(this.treeView1);
-            this.splitContainer1.Panel1.Controls.Add(this.LayerC);
+            this.splitContainer1.Panel1.Controls.Add(this.Combobox_Layer);
             this.splitContainer1.Panel1.Controls.Add(this.label2);
             this.splitContainer1.Panel1.Controls.Add(this.ButtonM);
             this.splitContainer1.Panel1.Controls.Add(this.formule);
@@ -123,13 +127,34 @@
             this.splitContainer1.SplitterDistance = 659;
             this.splitContainer1.TabIndex = 8;
             // 
-            // checkedListBox1
+            // checkedListBox_Layer
             // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(28, 175);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(120, 94);
-            this.checkedListBox1.TabIndex = 8;
+            this.checkedListBox_Layer.FormattingEnabled = true;
+            this.checkedListBox_Layer.Location = new System.Drawing.Point(28, 175);
+            this.checkedListBox_Layer.Name = "checkedListBox_Layer";
+            this.checkedListBox_Layer.Size = new System.Drawing.Size(120, 94);
+            this.checkedListBox_Layer.TabIndex = 8;
+            this.checkedListBox_Layer.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox_Layer_ItemCheck);
+            // 
+            // buttonSelec
+            // 
+            this.buttonSelec.Location = new System.Drawing.Point(241, 83);
+            this.buttonSelec.Name = "buttonSelec";
+            this.buttonSelec.Size = new System.Drawing.Size(75, 23);
+            this.buttonSelec.TabIndex = 9;
+            this.buttonSelec.Text = "选择";
+            this.buttonSelec.UseVisualStyleBackColor = true;
+            this.buttonSelec.Click += new System.EventHandler(this.buttonSelec_Click);
+            // 
+            // B_ReloadLayer
+            // 
+            this.B_ReloadLayer.Location = new System.Drawing.Point(28, 276);
+            this.B_ReloadLayer.Name = "B_ReloadLayer";
+            this.B_ReloadLayer.Size = new System.Drawing.Size(22, 23);
+            this.B_ReloadLayer.TabIndex = 10;
+            this.B_ReloadLayer.Text = "button1";
+            this.B_ReloadLayer.UseVisualStyleBackColor = true;
+            this.B_ReloadLayer.Click += new System.EventHandler(this.B_ReloadLayer_Click);
             // 
             // MainForm
             // 
@@ -152,7 +177,7 @@
         #endregion
 
         private System.Windows.Forms.ListBox listLine;
-        private System.Windows.Forms.ComboBox LayerC;
+        private System.Windows.Forms.ComboBox Combobox_Layer;
         private System.Windows.Forms.Button ButtonM;
         private System.Windows.Forms.Button ButtonV;
         private System.Windows.Forms.Label label1;
@@ -160,6 +185,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.CheckedListBox checkedListBox_Layer;
+        private System.Windows.Forms.Button buttonSelec;
+        private System.Windows.Forms.Button B_ReloadLayer;
     }
 }
