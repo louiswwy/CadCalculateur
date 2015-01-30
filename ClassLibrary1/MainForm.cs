@@ -221,7 +221,7 @@ namespace Calculers
                     if (acSSPrompt.Status == PromptStatus.OK)
                     {
                         SelectionSet acSSet = acSSPrompt.Value;
-                        AcadApp.ShowAlertDialog("picked: " + acSSet.Count.ToString());
+                        //AcadApp.ShowAlertDialog("picked: " + acSSet.Count.ToString());
                         // Step through the objects in the selection set
                         foreach (SelectedObject acSSObj in acSSet)
                         {
@@ -232,27 +232,26 @@ namespace Calculers
                                 //AcadApp.ShowAlertDialog("2;");
                                 // Open the selected object for write
                                 Line acEnt = acTrans.GetObject(acSSObj.ObjectId,
-                                                       OpenMode.ForWrite) as Line;
+                                                       OpenMode.ForRead) as Line;
                                 //AcadApp.ShowAlertDialog("3;");
                                 formule.Text = acEnt.Length.ToString();
                                 //listLines = acEnt;
-                                AcadApp.ShowAlertDialog("length: " + acEnt.Length.ToString());
+                                //AcadApp.ShowAlertDialog("length: " + acEnt.Length.ToString());
 
                                 LineList SelectedLine = new LineList(acEnt.GetType().ToString(),acEnt.StartPoint,acEnt.EndPoint,acEnt.Length);
 
                                 listOfLine.Add(SelectedLine);
-                                //listLines(acEnt);  //导致cad程序崩溃.
-                                if (acEnt != null)
-                                {
+                                //if (acEnt != null)
+                                //{
                                     // Change the object's color to Green
-                                    acEnt.ColorIndex = 5;
+                                 //   acEnt.ColorIndex = 5;
                                     //AcadApp.ShowAlertDialog("4;");
-                                }
+                                //}
                             }
                         }
                         // Save the new object to the database
                         //formule 
-                        acTrans.Commit();
+                        //acTrans.Commit();
                         //acEnt.downgradopen
                     }
                     else { return; }
@@ -311,22 +310,34 @@ namespace Calculers
 
         private void ButtonV_Click(object sender, EventArgs e)
         {
-            double SumLinesLength=new double();
-            string FormuleLineLength = "";
+            formule.Text = "";
+            double _SumLinesLength=new double();
+            string _FormuleLineLength = "";
+            string _ResumeLineLength = "";
 
+            int _NumLine = listOfLine.Count;
+            _FormuleLineLength = "共选中:" + _NumLine + "条线.\r\n";
+            int i = 0;
             foreach (LineList _line in listOfLine)
             {
+                string _LineLength = "";
                 
-                SumLinesLength = _line.LengthLine + SumLinesLength;
-                
-                listOfLine.nex
-                //if (FormuleLineLength == "" || FormuleLineLength == null)
-                //{
-                FormuleLineLength = FormuleLineLength + "+" + SumLinesLength.ToString() + " "; 
-                //}
-            }
+                //AcadApp.ShowAlertDialog("i:" + i + ":" + _line.LengthLine);
+                _SumLinesLength = _line.LengthLine + _SumLinesLength;
 
-            formule.Text = "选中线段长度为:" + SumLinesLength.ToString();
+                if (true)//i != _NumLine)
+                {
+                    _LineLength = "线段" + i + ":  " + _line.LengthLine + "\r\n";
+                    _ResumeLineLength = _ResumeLineLength + _LineLength;
+                }
+                //else
+                //{
+                //    FormuleLineLength = FormuleLineLength + " + " + SumLinesLength.ToString();
+                //}
+                i++;
+            }
+            formule.Text = _FormuleLineLength + _ResumeLineLength + "\r\n选中线段长度为:" + _SumLinesLength.ToString();
+            //formule.Text = "选中线段长度为:" + SumLinesLength.ToString();
         }
 
 
