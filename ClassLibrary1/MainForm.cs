@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.ApplicationServices;
@@ -48,10 +49,17 @@ namespace Calculers
         /// </summary>
         public class LineList
         {
+            private int _numLine;
             private string _lineType;
             private Point3d _startPoint;
             private Point3d _endPoint;
             private Double _lengLine;
+            
+            public int NumLine
+            {
+                get { return this._numLine; }
+                set { this._numLine = value; }
+            }
             public string TypeName
             {
                 get { return this._lineType; }
@@ -78,7 +86,7 @@ namespace Calculers
 
             public LineList() { }
 
-            public LineList(string lineType, Point3d startPoint, Point3d endPoint, Double lengLine)
+            public LineList(int NumLine,string lineType, Point3d startPoint, Point3d endPoint, Double lengLine)
             {
                 this._lineType = lineType;
                 this._startPoint = startPoint;
@@ -205,6 +213,7 @@ namespace Calculers
         /// <param name="e"></param>
         private void buttonSelec_Click(object sender, EventArgs e)
         {
+            int i = 1;
             this.Visible = false;
             //Line listLines =new Line();
             //锁定文件防止出现错误"eLockViolation";
@@ -238,7 +247,7 @@ namespace Calculers
                                 //listLines = acEnt;
                                 //AcadApp.ShowAlertDialog("length: " + acEnt.Length.ToString());
 
-                                LineList SelectedLine = new LineList(acEnt.GetType().ToString(),acEnt.StartPoint,acEnt.EndPoint,acEnt.Length);
+                                LineList SelectedLine = new LineList(i, acEnt.GetType().ToString(), acEnt.StartPoint, acEnt.EndPoint, acEnt.Length);
 
                                 listOfLine.Add(SelectedLine);
                                 //if (acEnt != null)
@@ -247,6 +256,7 @@ namespace Calculers
                                  //   acEnt.ColorIndex = 5;
                                     //AcadApp.ShowAlertDialog("4;");
                                 //}
+                                i++;
                             }
                         }
                         // Save the new object to the database
@@ -263,6 +273,28 @@ namespace Calculers
                 }
             }
             this.Visible = true;
+
+            //////////
+            TreeNode node = new TreeNode();
+            node.Text = "Line";
+            treeView1.Nodes.Add(node);
+
+            foreach (LineList _line in listOfLine)
+            {
+                TreeNode node1 = new TreeNode();
+                node1.Text = "line:" + _line.NumLine;
+                node.Nodes.Add(node1);//node下的两个子节点。
+            }
+
+
+            TreeNode node11 = new TreeNode();
+            node11.Text = "hopeoneone";
+            node.Nodes.Add(node11);//在node1下面在添加一个结点。
+
+            TreeNode node2 = new TreeNode();
+            node2.Text = "hopetwo";   
+            node.Nodes.Add(node2);
+            //////////
             m_DocumentLock.Dispose();
         }
 
@@ -340,6 +372,21 @@ namespace Calculers
             //formule.Text = "选中线段长度为:" + SumLinesLength.ToString();
         }
 
+        private void ButtonM_Click(object sender, EventArgs e)
+        {
+            
+            Form1_Paint(this, new PaintEventArgs(CreateGraphics(), ClientRectangle));
+        }
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.Clear(BackColor);
+            splitContainer1.Panel2.CreateGraphics().Clear(splitContainer1.Panel2.BackColor);
+            e.Graphics.DrawLine(Pens.Black, new Point(0, 0), new Point(ClientRectangle.Width, ClientRectangle.Height));
+            //注意坐标系变换。
+            splitContainer1.Panel2.CreateGraphics().DrawLine
+                (Pens.Black, new Point(-splitContainer1.Panel2.Left, -splitContainer1.Panel2.Top),
+                new Point(ClientRectangle.Width - splitContainer1.Panel2.Left, ClientRectangle.Height - splitContainer1.Panel2.Top));
+        }
 
 
     }

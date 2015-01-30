@@ -47,25 +47,26 @@
             // Combobox_Layer
             // 
             this.Combobox_Layer.FormattingEnabled = true;
-            this.Combobox_Layer.Location = new System.Drawing.Point(241, 25);
+            this.Combobox_Layer.Location = new System.Drawing.Point(87, 25);
             this.Combobox_Layer.Name = "Combobox_Layer";
-            this.Combobox_Layer.Size = new System.Drawing.Size(121, 21);
+            this.Combobox_Layer.Size = new System.Drawing.Size(100, 21);
             this.Combobox_Layer.TabIndex = 1;
             this.Combobox_Layer.SelectionChangeCommitted += new System.EventHandler(this.LayerC_SelectionChangeCommitted);
             // 
             // ButtonM
             // 
             this.ButtonM.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonM.Location = new System.Drawing.Point(121, 160);
+            this.ButtonM.Location = new System.Drawing.Point(3, 207);
             this.ButtonM.Name = "ButtonM";
             this.ButtonM.Size = new System.Drawing.Size(75, 23);
             this.ButtonM.TabIndex = 2;
             this.ButtonM.Text = "减去";
             this.ButtonM.UseVisualStyleBackColor = true;
+            this.ButtonM.Click += new System.EventHandler(this.ButtonM_Click);
             // 
             // ButtonV
             // 
-            this.ButtonV.Location = new System.Drawing.Point(28, 189);
+            this.ButtonV.Location = new System.Drawing.Point(3, 178);
             this.ButtonV.Name = "ButtonV";
             this.ButtonV.Size = new System.Drawing.Size(75, 23);
             this.ButtonV.TabIndex = 3;
@@ -76,7 +77,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(238, 9);
+            this.label1.Location = new System.Drawing.Point(84, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 4;
@@ -84,17 +85,17 @@
             // 
             // formule
             // 
-            this.formule.Location = new System.Drawing.Point(205, 125);
+            this.formule.Location = new System.Drawing.Point(87, 162);
             this.formule.Multiline = true;
             this.formule.Name = "formule";
             this.formule.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.formule.Size = new System.Drawing.Size(381, 282);
+            this.formule.Size = new System.Drawing.Size(100, 239);
             this.formule.TabIndex = 5;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(202, 106);
+            this.label2.Location = new System.Drawing.Point(84, 146);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(91, 13);
             this.label2.TabIndex = 6;
@@ -102,9 +103,9 @@
             // 
             // treeView1
             // 
-            this.treeView1.Location = new System.Drawing.Point(28, 15);
+            this.treeView1.Location = new System.Drawing.Point(3, 9);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(168, 97);
+            this.treeView1.Size = new System.Drawing.Size(75, 97);
             this.treeView1.TabIndex = 7;
             // 
             // splitContainer1
@@ -115,23 +116,27 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.treeView1);
             this.splitContainer1.Panel1.Controls.Add(this.B_ReloadLayer);
             this.splitContainer1.Panel1.Controls.Add(this.buttonSelec);
             this.splitContainer1.Panel1.Controls.Add(this.checkedListBox_Layer);
-            this.splitContainer1.Panel1.Controls.Add(this.treeView1);
             this.splitContainer1.Panel1.Controls.Add(this.Combobox_Layer);
             this.splitContainer1.Panel1.Controls.Add(this.label2);
             this.splitContainer1.Panel1.Controls.Add(this.ButtonM);
             this.splitContainer1.Panel1.Controls.Add(this.formule);
             this.splitContainer1.Panel1.Controls.Add(this.ButtonV);
             this.splitContainer1.Panel1.Controls.Add(this.label1);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Size = new System.Drawing.Size(742, 481);
-            this.splitContainer1.SplitterDistance = 589;
+            this.splitContainer1.SplitterDistance = 201;
             this.splitContainer1.TabIndex = 8;
             // 
             // B_ReloadLayer
             // 
-            this.B_ReloadLayer.Location = new System.Drawing.Point(28, 123);
+            this.B_ReloadLayer.Location = new System.Drawing.Point(3, 112);
             this.B_ReloadLayer.Name = "B_ReloadLayer";
             this.B_ReloadLayer.Size = new System.Drawing.Size(22, 23);
             this.B_ReloadLayer.TabIndex = 10;
@@ -141,7 +146,7 @@
             // 
             // buttonSelec
             // 
-            this.buttonSelec.Location = new System.Drawing.Point(28, 160);
+            this.buttonSelec.Location = new System.Drawing.Point(3, 149);
             this.buttonSelec.Name = "buttonSelec";
             this.buttonSelec.Size = new System.Drawing.Size(75, 23);
             this.buttonSelec.TabIndex = 9;
@@ -152,9 +157,9 @@
             // checkedListBox_Layer
             // 
             this.checkedListBox_Layer.FormattingEnabled = true;
-            this.checkedListBox_Layer.Location = new System.Drawing.Point(379, 25);
+            this.checkedListBox_Layer.Location = new System.Drawing.Point(87, 49);
             this.checkedListBox_Layer.Name = "checkedListBox_Layer";
-            this.checkedListBox_Layer.Size = new System.Drawing.Size(192, 94);
+            this.checkedListBox_Layer.Size = new System.Drawing.Size(100, 94);
             this.checkedListBox_Layer.TabIndex = 8;
             this.checkedListBox_Layer.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox_Layer_ItemCheck);
             // 
