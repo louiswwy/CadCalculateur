@@ -49,8 +49,8 @@ namespace Calculers
         public class LineList
         {
             private string _lineType;
-            private Point2d _startPoint;
-            private Point2d _endPoint;
+            private Point3d _startPoint;
+            private Point3d _endPoint;
             private Double _lengLine;
             public string TypeName
             {
@@ -58,13 +58,13 @@ namespace Calculers
                 set { this._lineType = value; }
             }
                                
-            public Point2d StartPoint
+            public Point3d StartPoint
             {
                 get { return this._startPoint; }
                 set { this._startPoint = value; }
             }
                         
-            public Point2d EndPoint
+            public Point3d EndPoint
             {
                 get { return this._endPoint; }
                 set { this._endPoint = value; }
@@ -78,7 +78,7 @@ namespace Calculers
 
             public LineList() { }
 
-            public LineList(string lineType, Point2d startPoint, Point2d endPoint, Double lengLine)
+            public LineList(string lineType, Point3d startPoint, Point3d endPoint, Double lengLine)
             {
                 this._lineType = lineType;
                 this._startPoint = startPoint;
@@ -206,7 +206,7 @@ namespace Calculers
         private void buttonSelec_Click(object sender, EventArgs e)
         {
             this.Visible = false;
-            Line listLines =new Line();
+            //Line listLines =new Line();
             //锁定文件防止出现错误"eLockViolation";
             DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
             // Start a transaction
@@ -235,8 +235,12 @@ namespace Calculers
                                                        OpenMode.ForWrite) as Line;
                                 //AcadApp.ShowAlertDialog("3;");
                                 formule.Text = acEnt.Length.ToString();
-                                listLines = acEnt;
+                                //listLines = acEnt;
                                 AcadApp.ShowAlertDialog("length: " + acEnt.Length.ToString());
+
+                                LineList SelectedLine = new LineList(acEnt.GetType().ToString(),acEnt.StartPoint,acEnt.EndPoint,acEnt.Length);
+
+                                listOfLine.Add(SelectedLine);
                                 //listLines(acEnt);  //导致cad程序崩溃.
                                 if (acEnt != null)
                                 {
@@ -268,15 +272,16 @@ namespace Calculers
             checkedListBox_Layer.Items.Clear();
             loadLayer();
         }
-
+        string strCollected = string.Empty;
         private void checkedListBox_Layer_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            string strCollected = string.Empty;
+            int a = 0;
             for (int i = 0; i < checkedListBox_Layer.Items.Count; i++)
             {
                 if (checkedListBox_Layer.GetItemChecked(i))
                 {
-                    try
+                    a++;
+                    /*try
                     {
                         //checkedListBox_Layer = Convert.ToInt32(checkedListBox_Layer.CheckedItems.Count);
                         //string temp = _selectLayer.Find(delegate(checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i])));
@@ -284,24 +289,44 @@ namespace Calculers
                         {
                             if (strCollected == string.Empty)
                             {
+                                AcadApp.ShowAlertDialog("为空" );
                                 strCollected = checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i]);
                             }
-                            else
+                            else if (!strCollected.Contains(checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i])))
                             {
+                                AcadApp.ShowAlertDialog("添加:" );
                                 strCollected = strCollected + "/" + checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i]);
                             }
-                            MessageBox.Show(strCollected);
-                            //MessageBox.Show(checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i]));
-                            //_selectLayerNum.Add(checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i]));
-                            //_selectLayerNom.Add(checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i]));
+                            
                         }
                     }
                     catch (Autodesk.AutoCAD.Runtime.Exception ex)
                     {
                         AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
-                    }
+                    }*/
                 }
             }
+            MessageBox.Show("" + a);
+        }
+
+        private void ButtonV_Click(object sender, EventArgs e)
+        {
+            double SumLinesLength=new double();
+            string FormuleLineLength = "";
+
+            foreach (LineList _line in listOfLine)
+            {
+                
+                SumLinesLength = _line.LengthLine + SumLinesLength;
+                
+                listOfLine.nex
+                //if (FormuleLineLength == "" || FormuleLineLength == null)
+                //{
+                FormuleLineLength = FormuleLineLength + "+" + SumLinesLength.ToString() + " "; 
+                //}
+            }
+
+            formule.Text = "选中线段长度为:" + SumLinesLength.ToString();
         }
 
 

@@ -36,9 +36,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.checkedListBox_Layer = new System.Windows.Forms.CheckedListBox();
-            this.buttonSelec = new System.Windows.Forms.Button();
             this.B_ReloadLayer = new System.Windows.Forms.Button();
+            this.buttonSelec = new System.Windows.Forms.Button();
+            this.checkedListBox_Layer = new System.Windows.Forms.CheckedListBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -71,6 +71,7 @@
             this.ButtonV.TabIndex = 3;
             this.ButtonV.Text = "确认";
             this.ButtonV.UseVisualStyleBackColor = true;
+            this.ButtonV.Click += new System.EventHandler(this.ButtonV_Click);
             // 
             // label1
             // 
@@ -127,14 +128,15 @@
             this.splitContainer1.SplitterDistance = 659;
             this.splitContainer1.TabIndex = 8;
             // 
-            // checkedListBox_Layer
+            // B_ReloadLayer
             // 
-            this.checkedListBox_Layer.FormattingEnabled = true;
-            this.checkedListBox_Layer.Location = new System.Drawing.Point(28, 175);
-            this.checkedListBox_Layer.Name = "checkedListBox_Layer";
-            this.checkedListBox_Layer.Size = new System.Drawing.Size(120, 94);
-            this.checkedListBox_Layer.TabIndex = 8;
-            this.checkedListBox_Layer.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox_Layer_ItemCheck);
+            this.B_ReloadLayer.Location = new System.Drawing.Point(28, 276);
+            this.B_ReloadLayer.Name = "B_ReloadLayer";
+            this.B_ReloadLayer.Size = new System.Drawing.Size(22, 23);
+            this.B_ReloadLayer.TabIndex = 10;
+            this.B_ReloadLayer.Text = "button1";
+            this.B_ReloadLayer.UseVisualStyleBackColor = true;
+            this.B_ReloadLayer.Click += new System.EventHandler(this.B_ReloadLayer_Click);
             // 
             // buttonSelec
             // 
@@ -146,15 +148,14 @@
             this.buttonSelec.UseVisualStyleBackColor = true;
             this.buttonSelec.Click += new System.EventHandler(this.buttonSelec_Click);
             // 
-            // B_ReloadLayer
+            // checkedListBox_Layer
             // 
-            this.B_ReloadLayer.Location = new System.Drawing.Point(28, 276);
-            this.B_ReloadLayer.Name = "B_ReloadLayer";
-            this.B_ReloadLayer.Size = new System.Drawing.Size(22, 23);
-            this.B_ReloadLayer.TabIndex = 10;
-            this.B_ReloadLayer.Text = "button1";
-            this.B_ReloadLayer.UseVisualStyleBackColor = true;
-            this.B_ReloadLayer.Click += new System.EventHandler(this.B_ReloadLayer_Click);
+            this.checkedListBox_Layer.FormattingEnabled = true;
+            this.checkedListBox_Layer.Location = new System.Drawing.Point(28, 175);
+            this.checkedListBox_Layer.Name = "checkedListBox_Layer";
+            this.checkedListBox_Layer.Size = new System.Drawing.Size(120, 94);
+            this.checkedListBox_Layer.TabIndex = 8;
+            this.checkedListBox_Layer.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox_Layer_ItemCheck);
             // 
             // MainForm
             // 
