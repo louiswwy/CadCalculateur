@@ -52,7 +52,11 @@ namespace Calculers
             private int _idLine;
             private string _lineType;
             private Point3d _startPoint;
+            private string _startPointX;
+            private string _startPointY;
             private Point3d _endPoint;
+            private string _endPointX;
+            private string _endPointY;
             private Double _lengLine;
             
             public int ID
@@ -71,6 +75,7 @@ namespace Calculers
                 get { return this._startPoint; }
                 set { this._startPoint = value; }
             }
+
                         
             public Point3d EndPoint
             {
@@ -105,16 +110,12 @@ namespace Calculers
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            /*if (LineList.Items.Count > 1)
-            {
-                ButtonM.Enabled = false;
-                ButtonV.Enabled = false;
-            }*/
-
+            CalculerLine._IsShow = true;
             //清空显示图层的下拉列表框中的内容
             this.Combobox_Layer.Items.Clear();
             //显示所有图层
             loadLayer();
+            loadDefautBlock();
         }
 
        
@@ -214,6 +215,7 @@ namespace Calculers
         /// <param name="e"></param>
         private void buttonSelec_Click(object sender, EventArgs e)
         {
+            treeView1.Nodes.Clear();
             listOfLine.Clear();
             int i = 1;
             this.Visible = false;
@@ -302,26 +304,51 @@ namespace Calculers
 
         public void FillUpDataGrid()
         {
-            int RowIndex=0;
+            int RowIndex = 0;
             RowIndex = this.dataGridView1.Rows.Add();
-            AcadApp.ShowAlertDialog("出错了!,错误信息:" + listOfLine.Count);
-            foreach (LineList _ent_Line in listOfLine)
+            AcadApp.ShowAlertDialog("选中:" + listOfLine.Count);
+            try
             {
-                if (_ent_Line.ID!=0)
+                dataGridView2.DataSource = listOfLine;
+                /*foreach (LineList _ent_Line in listOfLine)
                 {
-                    dataGridView1.Rows[RowIndex].Cells[0].Value = _ent_Line.ID.ToString();
-                    dataGridView1.Rows[RowIndex].Cells[1].Value = _ent_Line.StartPoint.X.ToString("F2");
-                    dataGridView1.Rows[RowIndex].Cells[2].Value = _ent_Line.StartPoint.Y.ToString("F2");
-                    dataGridView1.Rows[RowIndex].Cells[3].Value = _ent_Line.EndPoint.X.ToString("F2");
-                    dataGridView1.Rows[RowIndex].Cells[4].Value = _ent_Line.EndPoint.Y.ToString("F2");
-                    dataGridView1.Rows[RowIndex].Cells[5].Value = "null";//_Ent_Line.ID;
-                    dataGridView1.Rows[RowIndex].Cells[6].Value = "null";//_Ent_Line.ID;
-                    dataGridView1.Rows[RowIndex].Cells[7].Value = "null";//_Ent_Line.ID;
-                    dataGridView1.Rows[RowIndex].Cells[8].Value = "null";//_Ent_Line.ID;
-                    RowIndex++; 
-                }
+                    if (_ent_Line.ID!=0)
+                    {
+                        dataGridView1.Rows[RowIndex].Cells[0].Value = "null";//_ent_Line.ID.ToString();
+                        dataGridView1.Rows[RowIndex].Cells[1].Value = "null";//_ent_Line.StartPoint.X.ToString("F2");
+                        dataGridView1.Rows[RowIndex].Cells[2].Value = "null";//_ent_Line.StartPoint.Y.ToString("F2");
+                        dataGridView1.Rows[RowIndex].Cells[3].Value = "null";//_ent_Line.EndPoint.X.ToString("F2");
+                        dataGridView1.Rows[RowIndex].Cells[4].Value = "null";//_ent_Line.EndPoint.Y.ToString("F2");
+                        dataGridView1.Rows[RowIndex].Cells[5].Value = "null";//_Ent_Line.ID;
+                        dataGridView1.Rows[RowIndex].Cells[6].Value = "null";//_Ent_Line.ID;
+                        dataGridView1.Rows[RowIndex].Cells[7].Value = "null";//_Ent_Line.ID;
+                        dataGridView1.Rows[RowIndex].Cells[8].Value = "null";//_Ent_Line.ID;
+                        RowIndex++; 
+                    }
+                }*/
+
+
+                /*for (RowIndex = 0; RowIndex < 30; RowIndex++)
+                {
+                    dataGridView1.Rows[RowIndex].Cells[0].Value = "1";//_ent_Line.ID.ToString();
+                    dataGridView1.Rows[RowIndex].Cells[1].Value = "1";//_ent_Line.StartPoint.X.ToString("F2");
+                    dataGridView1.Rows[RowIndex].Cells[2].Value = "1";//_ent_Line.StartPoint.Y.ToString("F2");
+                    dataGridView1.Rows[RowIndex].Cells[3].Value = "1";//_ent_Line.EndPoint.X.ToString("F2");
+                    dataGridView1.Rows[RowIndex].Cells[4].Value = "1";//_ent_Line.EndPoint.Y.ToString("F2");
+                    dataGridView1.Rows[RowIndex].Cells[5].Value = "1";//_Ent_Line.ID;
+                    dataGridView1.Rows[RowIndex].Cells[6].Value = "1";//_Ent_Line.ID;
+                    dataGridView1.Rows[RowIndex].Cells[7].Value = "1";//_Ent_Line.ID;
+                    //dataGridView1.Rows[RowIndex].Cells[8].Value = "null";//_Ent_Line.ID;
+                }*/
+            }
+            catch (Autodesk.AutoCAD.Runtime.Exception ex)
+            {
+                AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
+                ed.WriteMessage("出错了!,错误信息: >" + ex.Message + "<\n");
             }
         }
+                
+        
 
         private void B_ReloadLayer_Click(object sender, EventArgs e)
         {
@@ -427,7 +454,7 @@ namespace Calculers
                     if (GetPoint("\n输入起点:", out startPoint) && GetPoint("\n输入终点:", startPoint, out endPoint))
                     {
                         // 绘制管道
-                        DrawPipe(startPoint, endPoint, 100, 70);
+                        //DrawPipe(startPoint, endPoint, 100, 70);
                     }            
                     // Request for objects to be selected in the drawing area
                     //PromptSelectionResult acSSPrompt = doc.Editor.GetCommandVersion;
@@ -485,7 +512,7 @@ namespace Calculers
             }
         }
 
-        private void DrawPipe(Point3d startPoint, Point3d endPoint, double width, double height)
+        /*private void DrawPipe(Point3d startPoint, Point3d endPoint, double width, double height)
         {
             // 获得变换矩阵
             Vector3d inVector = endPoint - startPoint;      // 入口向量
@@ -533,7 +560,7 @@ namespace Calculers
 
                 trans.Commit();
             }
-        }
+        }*/
 
         private Vector3d GetNormalByInVector(Vector3d inVector)
         {
@@ -585,6 +612,74 @@ namespace Calculers
 
             }
             m_DocumentLock.Dispose();
+
+        }
+
+        private void BA_RuKou_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Point3d DrawRecPoint;
+            Editor ed = doc.Editor;
+            GetPoint("\n输入起点:", out DrawRecPoint);
+            //获取长方形左上,右下的点的2d坐标
+            Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 100, DrawRecPoint.Y + 400);
+            Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 100, DrawRecPoint.Y);
+            DrawRectangle(RecStartPoint, RecEndPoint);
+            this.Show();
+        }
+        private void BA_ChuanLou_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Point3d DrawRecPoint;
+            GetPoint("\n输入起点:", out DrawRecPoint);
+            
+            //获取长方形左上,右下的点的2d坐标
+            Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 75, DrawRecPoint.Y + 300);
+            Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 75, DrawRecPoint.Y);
+            DrawRectangle(RecStartPoint, RecEndPoint);
+            this.Show();
+        }
+
+        public void DrawRectangle(Point2d StartPt,Point2d EndPoint)
+        {
+            DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
+            //获取用户在文件上选定的点坐标
+
+            //Rectangle3d rect = new Rectangle3d()
+            //生成长方形图
+            Polyline rectangle = new Polyline();
+            rectangle.CreateRectangle(StartPt, EndPoint);
+            using (Transaction trans = db.TransactionManager.StartTransaction())
+            {
+                BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
+                //以写方式打开模型空间块表记录
+                BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+                //将图形对象加入块表记录中,并返回objectid对象
+                db.AddToModelSpace(rectangle);
+                trans.Commit();
+            }
+            m_DocumentLock.Dispose();
+        }
+
+
+        private void CheckBox_TP_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CheckBox_TD_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CheckBox_TV_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //载入默认图块.
+        public void loadDefautBlock()
+        {
 
         }
 

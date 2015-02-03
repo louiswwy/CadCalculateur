@@ -36,12 +36,29 @@
             this.label2 = new System.Windows.Forms.Label();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkedListBox_Layer = new System.Windows.Forms.CheckedListBox();
+            this.groupBox_1 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.CheckBox_TD = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.CheckBox_TP = new System.Windows.Forms.CheckBox();
+            this.BA_ChuanLou = new System.Windows.Forms.Button();
+            this.CheckBox_TV = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.BA_RuKou = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.Button_End = new System.Windows.Forms.Button();
             this.Button_In = new System.Windows.Forms.Button();
             this.B_DrawLine = new System.Windows.Forms.Button();
-            this.B_ReloadLayer = new System.Windows.Forms.Button();
             this.buttonSelec = new System.Windows.Forms.Button();
-            this.checkedListBox_Layer = new System.Windows.Forms.CheckedListBox();
+            this.B_ReloadLayer = new System.Windows.Forms.Button();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Line_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LineStartPosition_X = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,22 +73,32 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox_1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // Combobox_Layer
             // 
             this.Combobox_Layer.FormattingEnabled = true;
-            this.Combobox_Layer.Location = new System.Drawing.Point(100, 25);
+            this.Combobox_Layer.Location = new System.Drawing.Point(9, 32);
             this.Combobox_Layer.Name = "Combobox_Layer";
-            this.Combobox_Layer.Size = new System.Drawing.Size(100, 21);
+            this.Combobox_Layer.Size = new System.Drawing.Size(121, 21);
             this.Combobox_Layer.TabIndex = 1;
             this.Combobox_Layer.SelectionChangeCommitted += new System.EventHandler(this.LayerC_SelectionChangeCommitted);
             // 
             // ButtonM
             // 
             this.ButtonM.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonM.Location = new System.Drawing.Point(3, 207);
+            this.ButtonM.Location = new System.Drawing.Point(13, 205);
             this.ButtonM.Name = "ButtonM";
             this.ButtonM.Size = new System.Drawing.Size(75, 23);
             this.ButtonM.TabIndex = 2;
@@ -81,7 +108,7 @@
             // 
             // ButtonV
             // 
-            this.ButtonV.Location = new System.Drawing.Point(3, 178);
+            this.ButtonV.Location = new System.Drawing.Point(13, 176);
             this.ButtonV.Name = "ButtonV";
             this.ButtonV.Size = new System.Drawing.Size(75, 23);
             this.ButtonV.TabIndex = 3;
@@ -92,7 +119,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(97, 9);
+            this.label1.Location = new System.Drawing.Point(6, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 4;
@@ -100,17 +127,17 @@
             // 
             // formule
             // 
-            this.formule.Location = new System.Drawing.Point(100, 162);
+            this.formule.Location = new System.Drawing.Point(117, 43);
             this.formule.Multiline = true;
             this.formule.Name = "formule";
             this.formule.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.formule.Size = new System.Drawing.Size(100, 239);
+            this.formule.Size = new System.Drawing.Size(230, 239);
             this.formule.TabIndex = 5;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(97, 146);
+            this.label2.Location = new System.Drawing.Point(114, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(91, 13);
             this.label2.TabIndex = 6;
@@ -118,7 +145,7 @@
             // 
             // treeView1
             // 
-            this.treeView1.Location = new System.Drawing.Point(3, 9);
+            this.treeView1.Location = new System.Drawing.Point(13, 15);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(75, 97);
             this.treeView1.TabIndex = 7;
@@ -132,31 +159,198 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.Button_End);
-            this.splitContainer1.Panel1.Controls.Add(this.Button_In);
-            this.splitContainer1.Panel1.Controls.Add(this.B_DrawLine);
-            this.splitContainer1.Panel1.Controls.Add(this.treeView1);
-            this.splitContainer1.Panel1.Controls.Add(this.B_ReloadLayer);
-            this.splitContainer1.Panel1.Controls.Add(this.buttonSelec);
-            this.splitContainer1.Panel1.Controls.Add(this.checkedListBox_Layer);
-            this.splitContainer1.Panel1.Controls.Add(this.Combobox_Layer);
-            this.splitContainer1.Panel1.Controls.Add(this.label2);
-            this.splitContainer1.Panel1.Controls.Add(this.ButtonM);
-            this.splitContainer1.Panel1.Controls.Add(this.formule);
-            this.splitContainer1.Panel1.Controls.Add(this.ButtonV);
-            this.splitContainer1.Panel1.Controls.Add(this.label1);
+            this.splitContainer1.Panel1.Controls.Add(this.tabControl1);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.AutoScroll = true;
-            this.splitContainer1.Panel2.Controls.Add(this.dataGridView1);
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Size = new System.Drawing.Size(742, 481);
-            this.splitContainer1.SplitterDistance = 221;
+            this.splitContainer1.SplitterDistance = 426;
             this.splitContainer1.TabIndex = 8;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Location = new System.Drawing.Point(10, 10);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(399, 457);
+            this.tabControl1.TabIndex = 15;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.Controls.Add(this.groupBox_1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(391, 431);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.Combobox_Layer);
+            this.groupBox1.Controls.Add(this.checkedListBox_Layer);
+            this.groupBox1.Location = new System.Drawing.Point(6, 162);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(152, 167);
+            this.groupBox1.TabIndex = 15;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "图层";
+            // 
+            // checkedListBox_Layer
+            // 
+            this.checkedListBox_Layer.FormattingEnabled = true;
+            this.checkedListBox_Layer.Location = new System.Drawing.Point(9, 56);
+            this.checkedListBox_Layer.Name = "checkedListBox_Layer";
+            this.checkedListBox_Layer.Size = new System.Drawing.Size(121, 94);
+            this.checkedListBox_Layer.TabIndex = 8;
+            this.checkedListBox_Layer.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox_Layer_ItemCheck);
+            // 
+            // groupBox_1
+            // 
+            this.groupBox_1.Controls.Add(this.label7);
+            this.groupBox_1.Controls.Add(this.CheckBox_TD);
+            this.groupBox_1.Controls.Add(this.label6);
+            this.groupBox_1.Controls.Add(this.CheckBox_TP);
+            this.groupBox_1.Controls.Add(this.BA_ChuanLou);
+            this.groupBox_1.Controls.Add(this.CheckBox_TV);
+            this.groupBox_1.Controls.Add(this.label5);
+            this.groupBox_1.Controls.Add(this.label4);
+            this.groupBox_1.Controls.Add(this.BA_RuKou);
+            this.groupBox_1.Controls.Add(this.label3);
+            this.groupBox_1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.groupBox_1.Location = new System.Drawing.Point(6, 6);
+            this.groupBox_1.Name = "groupBox_1";
+            this.groupBox_1.Size = new System.Drawing.Size(152, 150);
+            this.groupBox_1.TabIndex = 14;
+            this.groupBox_1.TabStop = false;
+            this.groupBox_1.Text = "画图";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(4, 118);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(49, 13);
+            this.label7.TabIndex = 4;
+            this.label7.Text = "TD终端:";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // CheckBox_TD
+            // 
+            this.CheckBox_TD.AutoSize = true;
+            this.CheckBox_TD.Location = new System.Drawing.Point(55, 118);
+            this.CheckBox_TD.Name = "CheckBox_TD";
+            this.CheckBox_TD.Size = new System.Drawing.Size(65, 17);
+            this.CheckBox_TD.TabIndex = 18;
+            this.CheckBox_TD.Text = "TD端口";
+            this.CheckBox_TD.UseVisualStyleBackColor = true;
+            this.CheckBox_TD.CheckedChanged += new System.EventHandler(this.CheckBox_TD_CheckedChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(4, 93);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(48, 13);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "TP终端:";
+            // 
+            // CheckBox_TP
+            // 
+            this.CheckBox_TP.AutoSize = true;
+            this.CheckBox_TP.Location = new System.Drawing.Point(55, 93);
+            this.CheckBox_TP.Name = "CheckBox_TP";
+            this.CheckBox_TP.Size = new System.Drawing.Size(64, 17);
+            this.CheckBox_TP.TabIndex = 17;
+            this.CheckBox_TP.Text = "TP端口";
+            this.CheckBox_TP.UseVisualStyleBackColor = true;
+            this.CheckBox_TP.CheckedChanged += new System.EventHandler(this.CheckBox_TP_CheckedChanged);
+            // 
+            // BA_ChuanLou
+            // 
+            this.BA_ChuanLou.Location = new System.Drawing.Point(55, 40);
+            this.BA_ChuanLou.Name = "BA_ChuanLou";
+            this.BA_ChuanLou.Size = new System.Drawing.Size(75, 19);
+            this.BA_ChuanLou.TabIndex = 6;
+            this.BA_ChuanLou.UseVisualStyleBackColor = true;
+            this.BA_ChuanLou.Click += new System.EventHandler(this.BA_ChuanLou_Click);
+            // 
+            // CheckBox_TV
+            // 
+            this.CheckBox_TV.AutoSize = true;
+            this.CheckBox_TV.Location = new System.Drawing.Point(55, 67);
+            this.CheckBox_TV.Name = "CheckBox_TV";
+            this.CheckBox_TV.Size = new System.Drawing.Size(64, 17);
+            this.CheckBox_TV.TabIndex = 16;
+            this.CheckBox_TV.Text = "TV端口";
+            this.CheckBox_TV.UseVisualStyleBackColor = true;
+            this.CheckBox_TV.CheckedChanged += new System.EventHandler(this.CheckBox_TV_CheckedChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(4, 68);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(48, 13);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "TV终端:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 46);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(46, 13);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "穿楼洞:";
+            // 
+            // BA_RuKou
+            // 
+            this.BA_RuKou.Location = new System.Drawing.Point(55, 16);
+            this.BA_RuKou.Name = "BA_RuKou";
+            this.BA_RuKou.Size = new System.Drawing.Size(75, 19);
+            this.BA_RuKou.TabIndex = 5;
+            this.BA_RuKou.UseVisualStyleBackColor = true;
+            this.BA_RuKou.Click += new System.EventHandler(this.BA_RuKou_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(18, 22);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(34, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "入口:";
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.treeView1);
+            this.tabPage3.Controls.Add(this.formule);
+            this.tabPage3.Controls.Add(this.Button_End);
+            this.tabPage3.Controls.Add(this.ButtonV);
+            this.tabPage3.Controls.Add(this.Button_In);
+            this.tabPage3.Controls.Add(this.ButtonM);
+            this.tabPage3.Controls.Add(this.B_DrawLine);
+            this.tabPage3.Controls.Add(this.label2);
+            this.tabPage3.Controls.Add(this.buttonSelec);
+            this.tabPage3.Controls.Add(this.B_ReloadLayer);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(391, 431);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // Button_End
             // 
-            this.Button_End.Location = new System.Drawing.Point(58, 112);
+            this.Button_End.Location = new System.Drawing.Point(68, 118);
             this.Button_End.Name = "Button_End";
             this.Button_End.Size = new System.Drawing.Size(20, 23);
             this.Button_End.TabIndex = 13;
@@ -165,7 +359,7 @@
             // 
             // Button_In
             // 
-            this.Button_In.Location = new System.Drawing.Point(31, 112);
+            this.Button_In.Location = new System.Drawing.Point(41, 118);
             this.Button_In.Name = "Button_In";
             this.Button_In.Size = new System.Drawing.Size(20, 23);
             this.Button_In.TabIndex = 12;
@@ -175,27 +369,17 @@
             // 
             // B_DrawLine
             // 
-            this.B_DrawLine.Location = new System.Drawing.Point(3, 236);
+            this.B_DrawLine.Location = new System.Drawing.Point(13, 234);
             this.B_DrawLine.Name = "B_DrawLine";
             this.B_DrawLine.Size = new System.Drawing.Size(75, 23);
             this.B_DrawLine.TabIndex = 11;
-            this.B_DrawLine.Text = "button1";
+            this.B_DrawLine.Text = "画线(?)";
             this.B_DrawLine.UseVisualStyleBackColor = true;
             this.B_DrawLine.Click += new System.EventHandler(this.B_DrawLine_Click);
             // 
-            // B_ReloadLayer
-            // 
-            this.B_ReloadLayer.Location = new System.Drawing.Point(3, 112);
-            this.B_ReloadLayer.Name = "B_ReloadLayer";
-            this.B_ReloadLayer.Size = new System.Drawing.Size(22, 23);
-            this.B_ReloadLayer.TabIndex = 10;
-            this.B_ReloadLayer.Text = "button1";
-            this.B_ReloadLayer.UseVisualStyleBackColor = true;
-            this.B_ReloadLayer.Click += new System.EventHandler(this.B_ReloadLayer_Click);
-            // 
             // buttonSelec
             // 
-            this.buttonSelec.Location = new System.Drawing.Point(3, 149);
+            this.buttonSelec.Location = new System.Drawing.Point(13, 147);
             this.buttonSelec.Name = "buttonSelec";
             this.buttonSelec.Size = new System.Drawing.Size(75, 23);
             this.buttonSelec.TabIndex = 9;
@@ -203,17 +387,46 @@
             this.buttonSelec.UseVisualStyleBackColor = true;
             this.buttonSelec.Click += new System.EventHandler(this.buttonSelec_Click);
             // 
-            // checkedListBox_Layer
+            // B_ReloadLayer
             // 
-            this.checkedListBox_Layer.FormattingEnabled = true;
-            this.checkedListBox_Layer.Location = new System.Drawing.Point(100, 49);
-            this.checkedListBox_Layer.Name = "checkedListBox_Layer";
-            this.checkedListBox_Layer.Size = new System.Drawing.Size(100, 94);
-            this.checkedListBox_Layer.TabIndex = 8;
-            this.checkedListBox_Layer.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox_Layer_ItemCheck);
+            this.B_ReloadLayer.Location = new System.Drawing.Point(13, 118);
+            this.B_ReloadLayer.Name = "B_ReloadLayer";
+            this.B_ReloadLayer.Size = new System.Drawing.Size(22, 23);
+            this.B_ReloadLayer.TabIndex = 10;
+            this.B_ReloadLayer.Text = "button1";
+            this.B_ReloadLayer.UseVisualStyleBackColor = true;
+            this.B_ReloadLayer.Click += new System.EventHandler(this.B_ReloadLayer_Click);
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.dataGridView2);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.dataGridView1);
+            this.splitContainer2.Size = new System.Drawing.Size(308, 477);
+            this.splitContainer2.SplitterDistance = 421;
+            this.splitContainer2.TabIndex = 2;
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView2.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.Size = new System.Drawing.Size(308, 421);
+            this.dataGridView2.TabIndex = 1;
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowUserToOrderColumns = true;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Line_ID,
@@ -228,7 +441,7 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(513, 477);
+            this.dataGridView1.Size = new System.Drawing.Size(308, 52);
             this.dataGridView1.TabIndex = 0;
             // 
             // Line_ID
@@ -261,7 +474,6 @@
             this.NumLine_Tube.HeaderText = "Num_Tube";
             this.NumLine_Tube.Name = "NumLine_Tube";
             this.NumLine_Tube.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.NumLine_Tube.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // NumLine_TD
             // 
@@ -289,10 +501,22 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox_1.ResumeLayout(false);
+            this.groupBox_1.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -325,5 +549,22 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_TD;
         private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_Tv;
         private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_TP;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.GroupBox groupBox_1;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button BA_ChuanLou;
+        private System.Windows.Forms.Button BA_RuKou;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.CheckBox CheckBox_TD;
+        private System.Windows.Forms.CheckBox CheckBox_TP;
+        private System.Windows.Forms.CheckBox CheckBox_TV;
     }
 }
