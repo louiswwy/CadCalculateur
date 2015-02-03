@@ -118,7 +118,12 @@ namespace Calculers
             loadDefautBlock();
         }
 
-       
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //窗口关闭时重置_IsShow的值,使窗口可以再次打开
+            CalculerLine._IsShow = false;
+        }
+
         public void loadLayer()
         {
             //显示所有layer
@@ -664,24 +669,32 @@ namespace Calculers
 
         private void CheckBox_TP_CheckedChanged(object sender, EventArgs e)
         {
-
+            loadDefautBlock();
         }
 
         private void CheckBox_TD_CheckedChanged(object sender, EventArgs e)
         {
-
+            loadDefautBlock();
         }
 
         private void CheckBox_TV_CheckedChanged(object sender, EventArgs e)
         {
-
+            loadDefautBlock();
         }
 
         //载入默认图块.
         public void loadDefautBlock()
         {
-
+            //PromptFileNameResult Fresult=ed.GetFileNameForOpen("");
+            //MessageBox.Show("+" + Fresult.StringResult);
+            //string fillPath="*\Block";
+            if (CheckBox_TD.Checked == true) { }
+            if (CheckBox_TP.Checked == true) { }
+            if (CheckBox_TV.Checked == true) { }
         }
+
+        //public void load
+
 
     }
 }
