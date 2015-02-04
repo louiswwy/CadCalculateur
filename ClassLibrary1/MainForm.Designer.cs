@@ -57,11 +57,13 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.BA_Port = new System.Windows.Forms.Button();
             this.Line_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LineStartPosition_X = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LineStartPosition_Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LineEndPosition_X = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LineEndPosition_Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LineLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NumLine_Tube = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NumLine_TD = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NumLine_Tv = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -163,7 +165,7 @@
             this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Size = new System.Drawing.Size(742, 481);
-            this.splitContainer1.SplitterDistance = 426;
+            this.splitContainer1.SplitterDistance = 423;
             this.splitContainer1.TabIndex = 8;
             // 
             // tabControl1
@@ -211,6 +213,7 @@
             // 
             // groupBox_1
             // 
+            this.groupBox_1.Controls.Add(this.BA_Port);
             this.groupBox_1.Controls.Add(this.CheckBox_TD);
             this.groupBox_1.Controls.Add(this.CheckBox_TP);
             this.groupBox_1.Controls.Add(this.BA_ChuanLou);
@@ -229,7 +232,7 @@
             // CheckBox_TD
             // 
             this.CheckBox_TD.AutoSize = true;
-            this.CheckBox_TD.Location = new System.Drawing.Point(14, 145);
+            this.CheckBox_TD.Location = new System.Drawing.Point(47, 144);
             this.CheckBox_TD.Name = "CheckBox_TD";
             this.CheckBox_TD.Size = new System.Drawing.Size(65, 17);
             this.CheckBox_TD.TabIndex = 18;
@@ -240,7 +243,7 @@
             // CheckBox_TP
             // 
             this.CheckBox_TP.AutoSize = true;
-            this.CheckBox_TP.Location = new System.Drawing.Point(15, 122);
+            this.CheckBox_TP.Location = new System.Drawing.Point(48, 121);
             this.CheckBox_TP.Name = "CheckBox_TP";
             this.CheckBox_TP.Size = new System.Drawing.Size(64, 17);
             this.CheckBox_TP.TabIndex = 17;
@@ -260,7 +263,7 @@
             // CheckBox_TV
             // 
             this.CheckBox_TV.AutoSize = true;
-            this.CheckBox_TV.Location = new System.Drawing.Point(15, 99);
+            this.CheckBox_TV.Location = new System.Drawing.Point(48, 98);
             this.CheckBox_TV.Name = "CheckBox_TV";
             this.CheckBox_TV.Size = new System.Drawing.Size(64, 17);
             this.CheckBox_TV.TabIndex = 16;
@@ -377,8 +380,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.dataGridView1);
-            this.splitContainer2.Size = new System.Drawing.Size(308, 477);
-            this.splitContainer2.SplitterDistance = 421;
+            this.splitContainer2.Size = new System.Drawing.Size(311, 477);
+            this.splitContainer2.SplitterDistance = 187;
             this.splitContainer2.TabIndex = 2;
             // 
             // dataGridView2
@@ -387,8 +390,9 @@
             this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView2.Location = new System.Drawing.Point(0, 0);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(308, 421);
+            this.dataGridView2.Size = new System.Drawing.Size(311, 187);
             this.dataGridView2.TabIndex = 1;
+            this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
             // 
             // dataGridView1
             // 
@@ -400,6 +404,7 @@
             this.LineStartPosition_Y,
             this.LineEndPosition_X,
             this.LineEndPosition_Y,
+            this.LineLength,
             this.NumLine_Tube,
             this.NumLine_TD,
             this.NumLine_Tv,
@@ -407,33 +412,57 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(308, 52);
+            this.dataGridView1.Size = new System.Drawing.Size(311, 286);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
+            this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
+            this.dataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseDown);
+            this.dataGridView1.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseUp);
+            this.dataGridView1.Click += new System.EventHandler(this.dataGridView1_Click);
+            // 
+            // BA_Port
+            // 
+            this.BA_Port.Location = new System.Drawing.Point(9, 98);
+            this.BA_Port.Name = "BA_Port";
+            this.BA_Port.Size = new System.Drawing.Size(30, 27);
+            this.BA_Port.TabIndex = 19;
+            this.BA_Port.UseVisualStyleBackColor = true;
             // 
             // Line_ID
             // 
             this.Line_ID.HeaderText = "ID";
             this.Line_ID.Name = "Line_ID";
+            this.Line_ID.ReadOnly = true;
             // 
             // LineStartPosition_X
             // 
             this.LineStartPosition_X.HeaderText = "Start_position_X";
             this.LineStartPosition_X.Name = "LineStartPosition_X";
+            this.LineStartPosition_X.ReadOnly = true;
             // 
             // LineStartPosition_Y
             // 
             this.LineStartPosition_Y.HeaderText = "Start_position_Y";
             this.LineStartPosition_Y.Name = "LineStartPosition_Y";
+            this.LineStartPosition_Y.ReadOnly = true;
             // 
             // LineEndPosition_X
             // 
             this.LineEndPosition_X.HeaderText = "End_Position_X";
             this.LineEndPosition_X.Name = "LineEndPosition_X";
+            this.LineEndPosition_X.ReadOnly = true;
             // 
             // LineEndPosition_Y
             // 
             this.LineEndPosition_Y.HeaderText = "End_Position_Y";
             this.LineEndPosition_Y.Name = "LineEndPosition_Y";
+            this.LineEndPosition_Y.ReadOnly = true;
+            // 
+            // LineLength
+            // 
+            this.LineLength.HeaderText = "Length";
+            this.LineLength.Name = "LineLength";
+            this.LineLength.ReadOnly = true;
             // 
             // NumLine_Tube
             // 
@@ -507,15 +536,6 @@
         private System.Windows.Forms.Button Button_End;
         private System.Windows.Forms.Button Button_In;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Line_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LineStartPosition_X;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LineStartPosition_Y;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LineEndPosition_X;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LineEndPosition_Y;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_Tube;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_TD;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_Tv;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_TP;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.GroupBox groupBox_1;
@@ -530,5 +550,16 @@
         private System.Windows.Forms.CheckBox CheckBox_TD;
         private System.Windows.Forms.CheckBox CheckBox_TP;
         private System.Windows.Forms.CheckBox CheckBox_TV;
+        private System.Windows.Forms.Button BA_Port;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Line_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LineStartPosition_X;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LineStartPosition_Y;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LineEndPosition_X;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LineEndPosition_Y;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LineLength;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_Tube;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_TD;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_Tv;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_TP;
     }
 }

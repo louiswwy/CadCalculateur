@@ -58,6 +58,10 @@ namespace Calculers
             private string _endPointX;
             private string _endPointY;
             private Double _lengLine;
+            private int _numTube;
+            private int _numTV;
+            private int _numTD;
+            private int _numTP;
             
             public int ID
             {
@@ -88,6 +92,27 @@ namespace Calculers
                 get { return this._lengLine; }
                 set { this._lengLine = value; }
             }
+            //
+            public int NumTube
+            {
+                get { return this._numTube; }
+                set { this._numTube = value; }
+            }
+            public int NumTV
+            {
+                get { return this._numTV; }
+                set { this._numTV = value; }
+            }
+            public int NumTD
+            {
+                get { return this._numTD; }
+                set { this._numTD = value; }
+            }
+            public int NumTP
+            {
+                get { return this._numTP; }
+                set { this._numTP = value; }
+            }
 
             public LineList() { }
 
@@ -98,6 +123,18 @@ namespace Calculers
                 this._startPoint = startPoint;
                 this._endPoint = endPoint;
                 this._lengLine = lengLine;
+            }
+            public LineList(int ID, string lineType, Point3d startPoint, Point3d endPoint, Double lengLine,int numtube,int numTv,int numTd,int numTp)
+            {
+                this._idLine = ID;
+                this._lineType = lineType;
+                this._startPoint = startPoint;
+                this._endPoint = endPoint;
+                this._lengLine = lengLine;
+                this._numTube=numtube;
+                this._numTV = numTv;
+                this._numTD = numTd;
+                this._numTP = numTp;
             }
         }
 
@@ -309,28 +346,29 @@ namespace Calculers
 
         public void FillUpDataGrid()
         {
-            int RowIndex = 0;
-            RowIndex = this.dataGridView1.Rows.Add();
-            AcadApp.ShowAlertDialog("选中:" + listOfLine.Count);
+            
+            //AcadApp.ShowAlertDialog("选中:" + listOfLine.Count);
             try
             {
+                //dataGridView2数据源绑定listOfLine
                 dataGridView2.DataSource = listOfLine;
-                /*foreach (LineList _ent_Line in listOfLine)
+                //逐条添加dataGridView1中的数据
+                foreach (LineList _ent_Line in listOfLine)
                 {
-                    if (_ent_Line.ID!=0)
-                    {
-                        dataGridView1.Rows[RowIndex].Cells[0].Value = "null";//_ent_Line.ID.ToString();
-                        dataGridView1.Rows[RowIndex].Cells[1].Value = "null";//_ent_Line.StartPoint.X.ToString("F2");
-                        dataGridView1.Rows[RowIndex].Cells[2].Value = "null";//_ent_Line.StartPoint.Y.ToString("F2");
-                        dataGridView1.Rows[RowIndex].Cells[3].Value = "null";//_ent_Line.EndPoint.X.ToString("F2");
-                        dataGridView1.Rows[RowIndex].Cells[4].Value = "null";//_ent_Line.EndPoint.Y.ToString("F2");
-                        dataGridView1.Rows[RowIndex].Cells[5].Value = "null";//_Ent_Line.ID;
-                        dataGridView1.Rows[RowIndex].Cells[6].Value = "null";//_Ent_Line.ID;
-                        dataGridView1.Rows[RowIndex].Cells[7].Value = "null";//_Ent_Line.ID;
-                        dataGridView1.Rows[RowIndex].Cells[8].Value = "null";//_Ent_Line.ID;
-                        RowIndex++; 
-                    }
-                }*/
+                    int RowIndex = 0;
+                    RowIndex = this.dataGridView1.Rows.Add();
+                    dataGridView1.Rows[RowIndex].Cells[0].Value = _ent_Line.ID.ToString();
+                    dataGridView1.Rows[RowIndex].Cells[1].Value = _ent_Line.StartPoint.X.ToString("F2");
+                    dataGridView1.Rows[RowIndex].Cells[2].Value = _ent_Line.StartPoint.Y.ToString("F2");
+                    dataGridView1.Rows[RowIndex].Cells[3].Value = _ent_Line.EndPoint.X.ToString("F2");
+                    dataGridView1.Rows[RowIndex].Cells[4].Value = _ent_Line.EndPoint.Y.ToString("F2");
+                    dataGridView1.Rows[RowIndex].Cells[5].Value = _ent_Line.LengthLine.ToString("F2"); ;
+                    dataGridView1.Rows[RowIndex].Cells[6].Value = "";//_Ent_Line.ID;
+                    dataGridView1.Rows[RowIndex].Cells[7].Value = "";//_Ent_Line.ID;
+                    dataGridView1.Rows[RowIndex].Cells[8].Value = ""; //_Ent_Line.ID;
+                    RowIndex++;
+                    
+                }
 
 
                 /*for (RowIndex = 0; RowIndex < 30; RowIndex++)
@@ -458,6 +496,9 @@ namespace Calculers
                     Point3d endPoint = new Point3d();
                     if (GetPoint("\n输入起点:", out startPoint) && GetPoint("\n输入终点:", startPoint, out endPoint))
                     {
+                        Line lin = new Line(startPoint, endPoint);
+                        db.AddToModelSpace(lin);
+                        acTrans.Commit();
                         // 绘制管道
                         //DrawPipe(startPoint, endPoint, 100, 70);
                     }            
@@ -468,8 +509,9 @@ namespace Calculers
                 {
                     AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
                     ed.WriteMessage("出错了!,错误信息: >" + ex.Message + "<\n");
-                }
+                }                
             }
+            m_DocumentLock.Dispose();
         }
 
         public bool GetPoint(string prompt, out Point3d pt)
@@ -613,6 +655,8 @@ namespace Calculers
                 Point3d startPoint = new Point3d();
                 if (GetPoint("\n输入起点:", out startPoint))
                 {
+
+                    ed.WriteMessage("未完成");                
                 }
 
             }
@@ -666,32 +710,137 @@ namespace Calculers
             m_DocumentLock.Dispose();
         }
 
-
+        //每次checkbox值变更,重新生成插座块的扩展属性.
         private void CheckBox_TP_CheckedChanged(object sender, EventArgs e)
         {
             loadDefautBlock();
         }
-
+        //每次checkbox值变更,重新生成插座块的扩展属性.
         private void CheckBox_TD_CheckedChanged(object sender, EventArgs e)
         {
             loadDefautBlock();
         }
-
+        //每次checkbox值变更,重新生成插座块的扩展属性.
         private void CheckBox_TV_CheckedChanged(object sender, EventArgs e)
         {
             loadDefautBlock();
         }
-
         //载入默认图块.
         public void loadDefautBlock()
         {
+            int _checkTp = 0; int _checkTd = 0; int _checkTv = 0; int _totalCheck = 0;
             //PromptFileNameResult Fresult=ed.GetFileNameForOpen("");
             //MessageBox.Show("+" + Fresult.StringResult);
             //string fillPath="*\Block";
-            if (CheckBox_TD.Checked == true) { }
-            if (CheckBox_TP.Checked == true) { }
-            if (CheckBox_TV.Checked == true) { }
+            if (CheckBox_TD.Checked == true) { _checkTd = 1; } else { _checkTd = 0; }
+            if (CheckBox_TP.Checked == true) { _checkTp = 1; } else { _checkTp = 0; }
+            if (CheckBox_TV.Checked == true) { _checkTv = 1; } else { _checkTv = 0; }
+            _totalCheck = _checkTp + _checkTd + _checkTv;
         }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+        int _rowNumber=0;
+        bool _hasClick = false;
+        private void dataGridView1_Click(object sender, EventArgs e)
+        {
+            
+            
+        }
+        //为显示效果而添加的线段
+        ObjectId _tempEntId;
+
+        private void dataGridView1_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            /*DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
+            
+            ed.WriteMessage("\n 放开 \n>");
+            using (Transaction trans = db.TransactionManager.StartTransaction())
+            {
+                try
+                {                
+                    //DBObject ent = _tempEntId.GetObject(OpenMode.ForWrite);
+                    //Entity ent = (Entity)_tempEntId.GetObject(OpenMode.ForWrite);
+
+                    //ent.Erase();
+                    //trans.Commit();
+                    //ent.DowngradeOpen();
+                }
+                catch (Autodesk.AutoCAD.Runtime.Exception ex)
+                {
+                    ed.WriteMessage("\n救命出错了!,错误信息: \n>" + ex.Message + "<\n");
+                    trans.Abort();
+                }
+            }
+            m_DocumentLock.Dispose();*/
+        }
+
+        private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            ed.WriteMessage("\n MouseDown \n>");
+            _hasClick = true;
+            DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
+            _rowNumber = dataGridView1.CurrentCell.RowIndex;
+            LineList LL = listOfLine[_rowNumber];
+            using (Transaction trans = db.TransactionManager.StartTransaction())
+            {
+                try
+                {
+                    //线
+                    Line _tmpLine = new Line(LL.StartPoint, LL.EndPoint);
+                    //线段的弧度
+                    double _angLine = Math.Atan2(LL.EndPoint.Y - LL.StartPoint.Y, LL.EndPoint.X - LL.StartPoint.X);
+                    //线段的角度
+                    double angLine = 180 * _angLine / Math.PI;
+
+                    ed.WriteMessage("角度为:angLine=  " + angLine);
+                    //改变线段的颜色为红色
+                    _tmpLine.ColorIndex = 1;
+                    //长方形的左上点和右下点
+                    Point2d _recStartP = new Point2d(LL.StartPoint.X - 10, LL.StartPoint.Y);
+                    Point2d _recEntP = new Point2d(LL.StartPoint.X + 10, LL.StartPoint.Y - LL.LengthLine);
+                    //长方形
+                    /*Polyline rectangle = new Polyline();
+                    rectangle.CreateRectangle(_recStartP, _recEntP);
+                    //改变线段的颜色为绿色
+                    rectangle.ColorIndex = 3;
+                    rectangle.Rotate(LL.StartPoint, Math.PI / 2 + angLine);*/
+
+                    //BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
+                    //以写方式打开模型空间块表记录
+                    //BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+                    //将图形对象加入块表记录中,并返回objectid对象
+                    db.AddToModelSpace(_tmpLine);//, rectangle);
+                    //db.AddToModelSpace(_tmpLine);//, rectangle);
+                    trans.Commit();
+                    //以写
+                    
+                }
+                catch (Autodesk.AutoCAD.Runtime.Exception ex)
+                {
+                    trans.Abort();
+                    //AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
+                    ed.WriteMessage("\n救命出错了!,错误信息: \n>" + ex.Message + "<\n");
+                }
+            }
+            m_DocumentLock.Dispose();
+            
+        }
+
+        private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+
+            ed.WriteMessage("\n click\n>");
+        }
+
+        private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            ed.WriteMessage("\n ContentDoubleClick\n>");
+        }
+
+
 
         //public void load
 
