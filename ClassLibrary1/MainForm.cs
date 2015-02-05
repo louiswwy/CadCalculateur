@@ -17,6 +17,7 @@ using Autodesk.AutoCAD.Colors;
 using DotNetARX;
 using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
 using AcadWnd = Autodesk.AutoCAD.Windows;
+using System.Text.RegularExpressions;
 
 namespace Calculers
 {
@@ -49,21 +50,17 @@ namespace Calculers
         /// </summary>
         public class LineList
         {
-            private int _idLine;
+            private string _idLine;
             private string _lineType;
             private Point3d _startPoint;
-            private string _startPointX;
-            private string _startPointY;
             private Point3d _endPoint;
-            private string _endPointX;
-            private string _endPointY;
             private Double _lengLine;
             private int _numTube;
             private int _numTV;
             private int _numTD;
             private int _numTP;
-            
-            public int ID
+
+            public string ID
             {
                 get { return this._idLine; }
                 set { this._idLine = value; }
@@ -116,7 +113,7 @@ namespace Calculers
 
             public LineList() { }
 
-            public LineList(int ID,string lineType, Point3d startPoint, Point3d endPoint, Double lengLine)
+            public LineList(string ID, string lineType, Point3d startPoint, Point3d endPoint, Double lengLine)
             {
                 this._idLine = ID;
                 this._lineType = lineType;
@@ -124,7 +121,7 @@ namespace Calculers
                 this._endPoint = endPoint;
                 this._lengLine = lengLine;
             }
-            public LineList(int ID, string lineType, Point3d startPoint, Point3d endPoint, Double lengLine,int numtube,int numTv,int numTd,int numTp)
+            public LineList(string ID, string lineType, Point3d startPoint, Point3d endPoint, Double lengLine, int numtube, int numTv, int numTd, int numTp)
             {
                 this._idLine = ID;
                 this._lineType = lineType;
@@ -259,6 +256,7 @@ namespace Calculers
         {
             treeView1.Nodes.Clear();
             listOfLine.Clear();
+            dataGridView1.Refresh();
             int i = 1;
             this.Visible = false;
             //Line listLines =new Line();
@@ -293,22 +291,14 @@ namespace Calculers
                                 //listLines = acEnt;
                                 //AcadApp.ShowAlertDialog("length: " + acEnt.Length.ToString());
 
-                                LineList SelectedLine = new LineList(i, acEnt.GetType().ToString(), acEnt.StartPoint, acEnt.EndPoint, acEnt.Length);
+                                LineList SelectedLine = new LineList(acEnt.ObjectId.Handle.Value.ToString()
+                                    , acEnt.GetType().ToString(), acEnt.StartPoint, acEnt.EndPoint, acEnt.Length);
 
                                 listOfLine.Add(SelectedLine);
-                                //if (acEnt != null)
-                                //{
-                                    // Change the object's color to Green
-                                 //   acEnt.ColorIndex = 5;
-                                    //AcadApp.ShowAlertDialog("4;");
-                                //}
+
                                 i++;
                             }
                         }
-                        // Save the new object to the database
-                        //formule 
-                        //acTrans.Commit();
-                        //acEnt.downgradopen
                     }
                     else { return; }
                 }
@@ -344,14 +334,18 @@ namespace Calculers
             m_DocumentLock.Dispose();
         }
 
+        #region datagridView装载与清除
         public void FillUpDataGrid()
         {
-            
+            if (dataGridView1.Rows.Count > 1)
+            {
+                ClearUpDataGrid();
+            }
             //AcadApp.ShowAlertDialog("选中:" + listOfLine.Count);
             try
             {
                 //dataGridView2数据源绑定listOfLine
-                dataGridView2.DataSource = listOfLine;
+                //dataGridView2.DataSource = listOfLine;
                 //逐条添加dataGridView1中的数据
                 foreach (LineList _ent_Line in listOfLine)
                 {
@@ -363,36 +357,28 @@ namespace Calculers
                     dataGridView1.Rows[RowIndex].Cells[3].Value = _ent_Line.EndPoint.X.ToString("F2");
                     dataGridView1.Rows[RowIndex].Cells[4].Value = _ent_Line.EndPoint.Y.ToString("F2");
                     dataGridView1.Rows[RowIndex].Cells[5].Value = _ent_Line.LengthLine.ToString("F2"); ;
-                    dataGridView1.Rows[RowIndex].Cells[6].Value = "";//_Ent_Line.ID;
-                    dataGridView1.Rows[RowIndex].Cells[7].Value = "";//_Ent_Line.ID;
-                    dataGridView1.Rows[RowIndex].Cells[8].Value = ""; //_Ent_Line.ID;
+                    dataGridView1.Rows[RowIndex].Cells[6].Value = _ent_Line.NumTube.ToString();
+                    dataGridView1.Rows[RowIndex].Cells[7].Value = _ent_Line.NumTD.ToString();
+                    dataGridView1.Rows[RowIndex].Cells[8].Value = _ent_Line.NumTV.ToString();
+                    dataGridView1.Rows[RowIndex].Cells[8].Value = _ent_Line.NumTP.ToString();
                     RowIndex++;
-                    
                 }
-
-
-                /*for (RowIndex = 0; RowIndex < 30; RowIndex++)
-                {
-                    dataGridView1.Rows[RowIndex].Cells[0].Value = "1";//_ent_Line.ID.ToString();
-                    dataGridView1.Rows[RowIndex].Cells[1].Value = "1";//_ent_Line.StartPoint.X.ToString("F2");
-                    dataGridView1.Rows[RowIndex].Cells[2].Value = "1";//_ent_Line.StartPoint.Y.ToString("F2");
-                    dataGridView1.Rows[RowIndex].Cells[3].Value = "1";//_ent_Line.EndPoint.X.ToString("F2");
-                    dataGridView1.Rows[RowIndex].Cells[4].Value = "1";//_ent_Line.EndPoint.Y.ToString("F2");
-                    dataGridView1.Rows[RowIndex].Cells[5].Value = "1";//_Ent_Line.ID;
-                    dataGridView1.Rows[RowIndex].Cells[6].Value = "1";//_Ent_Line.ID;
-                    dataGridView1.Rows[RowIndex].Cells[7].Value = "1";//_Ent_Line.ID;
-                    //dataGridView1.Rows[RowIndex].Cells[8].Value = "null";//_Ent_Line.ID;
-                }*/
             }
             catch (Autodesk.AutoCAD.Runtime.Exception ex)
             {
                 AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
-                ed.WriteMessage("出错了!,错误信息: >" + ex.Message + "<\n");
             }
         }
-                
-        
 
+        public void ClearUpDataGrid()
+        {
+            while (dataGridView1.Rows.Count > 1)
+            {
+                dataGridView1.Rows.RemoveAt(0);
+            }
+           
+        }
+        #endregion
         private void B_ReloadLayer_Click(object sender, EventArgs e)
         {
             checkedListBox_Layer.Items.Clear();
@@ -435,11 +421,26 @@ namespace Calculers
             MessageBox.Show("" + a);
         }
 
+        //计算线总长度
         private void ButtonV_Click(object sender, EventArgs e)
         {
             formule.Text = "";
+            //总长度
             double _SumLinesLength=new double();
+            //不同线缆和钢管的长度
+            double _sumTubeLength = 0;
+            double _sumTDLength = 0;
+            double _sumTPLength = 0;
+            double _sumTVLength = 0;
+
+            //
+            double SumTubeLength = 0;
+            double SumTDLength = 0;
+            double SumTPLength = 0;
+            double SumTVLength = 0;
+            //
             string _FormuleLineLength = "";
+            //
             string _ResumeLineLength = "";
 
             int _NumLine = listOfLine.Count;
@@ -447,15 +448,32 @@ namespace Calculers
             int i = 0;
             foreach (LineList _line in listOfLine)
             {
+                //在textbox中的显示各线段的长度
                 string _LineLength = "";
                 
                 //AcadApp.ShowAlertDialog("i:" + i + ":" + _line.LengthLine);
                 _SumLinesLength = _line.LengthLine + _SumLinesLength;
+                //计算每段线的长度
+                _sumTubeLength = _line.LengthLine * _line.NumTube;
+                _sumTDLength = _line.LengthLine * _line.NumTD;
+                _sumTPLength = _line.LengthLine * _line.NumTP;
+                _sumTVLength = _line.LengthLine * _line.NumTV;
 
+                SumTubeLength += _sumTubeLength;
+                SumTDLength += _sumTDLength;
+                SumTPLength += _sumTPLength;
+                SumTVLength += _sumTVLength;
                 if (true)//i != _NumLine)
                 {
-                    _LineLength = "线段" + i + ":  " + _line.LengthLine + "\r\n";
+                    _LineLength = "线段" + i + "长:  " + _line.LengthLine + "\r\n"
+                        + "钢管" + i + "长:  " + _sumTubeLength + "\r\n"
+                        + "TD" + i + "长:  " + _sumTDLength + "\r\n"
+                        + "TP" + i + "长:  " + _sumTPLength + "\r\n"
+                        + "TV" + i + "长:  " + _sumTVLength + "\r\n";
+                        
+                    //所有线段的长度
                     _ResumeLineLength = _ResumeLineLength + _LineLength;
+
                 }
                 //else
                 //{
@@ -463,7 +481,9 @@ namespace Calculers
                 //}
                 i++;
             }
-            formule.Text = _FormuleLineLength + _ResumeLineLength + "\r\n选中线段长度为:" + _SumLinesLength.ToString();
+            formule.Text = _FormuleLineLength + "\r\n"
+                + _ResumeLineLength + "\r\n选中线段长度为:" + _SumLinesLength.ToString() + "\r\n"
+                + SumTubeLength + "\r\n  TD:" + SumTDLength + "\r\n  TV:" + SumTVLength + "\r\n  TP:" + SumTPLength;
             //formule.Text = "选中线段长度为:" + SumLinesLength.ToString();
         }
 
@@ -559,56 +579,7 @@ namespace Calculers
             }
         }
 
-        /*private void DrawPipe(Point3d startPoint, Point3d endPoint, double width, double height)
-        {
-            // 获得变换矩阵
-            Vector3d inVector = endPoint - startPoint;      // 入口向量
-            Vector3d normal = GetNormalByInVector(inVector);       // 法向量
-            Matrix3d mat = GetTranslateMatrix(startPoint, inVector, normal);
-
-            Database db = HostApplicationServices.WorkingDatabase;
-            using (Transaction trans = db.TransactionManager.StartTransaction())
-            {
-                BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
-                BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
-
-                // 顶面
-                double z = 0.5 * height;
-                double length = startPoint.DistanceTo(endPoint);
-                Face fTop = new Face(new Point3d(0, -0.5 * width, z), new Point3d(length, -0.5 * width, z), new Point3d(length, 0.5 * width, z),
-                    new Point3d(0, 0.5 * width, z), true, true, true, true);
-                fTop.TransformBy(mat);
-                btr.AppendEntity(fTop);
-                trans.AddNewlyCreatedDBObject(fTop, true);
-
-                // 底面
-                z = -0.5 * height;
-                Face fBottom = new Face(new Point3d(0, -0.5 * width, z), new Point3d(length, -0.5 * width, z), new Point3d(length, 0.5 * width, z),
-                    new Point3d(0, 0.5 * width, z), true, true, true, true);
-                fBottom.TransformBy(mat);
-                btr.AppendEntity(fBottom);
-                trans.AddNewlyCreatedDBObject(fBottom, true);
-
-                // 左侧面
-                double y = 0.5 * width;
-                Face fLeftSide = new Face(new Point3d(0, y, 0.5 * height), new Point3d(length, y, 0.5 * height), new Point3d(length, y, -0.5 * height),
-                    new Point3d(0, y, -0.5 * height), true, true, true, true);
-                fLeftSide.TransformBy(mat);
-                btr.AppendEntity(fLeftSide);
-                trans.AddNewlyCreatedDBObject(fLeftSide, true);
-
-                // 左侧面
-                y = -0.5 * width;
-                Face fRightSide = new Face(new Point3d(0, y, 0.5 * height), new Point3d(length, y, 0.5 * height), new Point3d(length, y, -0.5 * height),
-                    new Point3d(0, y, -0.5 * height), true, true, true, true);
-                fRightSide.TransformBy(mat);
-                btr.AppendEntity(fRightSide);
-                trans.AddNewlyCreatedDBObject(fRightSide, true);
-
-                trans.Commit();
-            }
-        }*/
-
+        
         private Vector3d GetNormalByInVector(Vector3d inVector)
         {
             double tol = 1.0E-7;
@@ -737,21 +708,13 @@ namespace Calculers
             if (CheckBox_TV.Checked == true) { _checkTv = 1; } else { _checkTv = 0; }
             _totalCheck = _checkTp + _checkTd + _checkTv;
         }
-
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-        int _rowNumber=0;
-        bool _hasClick = false;
+        
         private void dataGridView1_Click(object sender, EventArgs e)
         {
             
             
         }
         //为显示效果而添加的线段
-        ObjectId _tempEntId;
-
         private void dataGridView1_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
         {
             /*DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
@@ -777,53 +740,37 @@ namespace Calculers
             m_DocumentLock.Dispose();*/
         }
 
+        int _currentRows;
+        int _currentColorIndex = 0;
         private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
             ed.WriteMessage("\n MouseDown \n>");
-            _hasClick = true;
             DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
-            _rowNumber = dataGridView1.CurrentCell.RowIndex;
+            int _rowNumber = dataGridView1.CurrentCell.RowIndex;
+            _currentRows = _rowNumber;
+            ed.WriteMessage("选中第:   " + _rowNumber + "行");
             LineList LL = listOfLine[_rowNumber];
-            using (Transaction trans = db.TransactionManager.StartTransaction())
+            ed.WriteMessage("选中实体id为:   " + LL.ID + "<");
+            if (true)             
             {
-                try
+                using (Transaction trans = db.TransactionManager.StartTransaction())
                 {
-                    //线
-                    Line _tmpLine = new Line(LL.StartPoint, LL.EndPoint);
-                    //线段的弧度
-                    double _angLine = Math.Atan2(LL.EndPoint.Y - LL.StartPoint.Y, LL.EndPoint.X - LL.StartPoint.X);
-                    //线段的角度
-                    double angLine = 180 * _angLine / Math.PI;
-
-                    ed.WriteMessage("角度为:angLine=  " + angLine);
-                    //改变线段的颜色为红色
-                    _tmpLine.ColorIndex = 1;
-                    //长方形的左上点和右下点
-                    Point2d _recStartP = new Point2d(LL.StartPoint.X - 10, LL.StartPoint.Y);
-                    Point2d _recEntP = new Point2d(LL.StartPoint.X + 10, LL.StartPoint.Y - LL.LengthLine);
-                    //长方形
-                    /*Polyline rectangle = new Polyline();
-                    rectangle.CreateRectangle(_recStartP, _recEntP);
-                    //改变线段的颜色为绿色
-                    rectangle.ColorIndex = 3;
-                    rectangle.Rotate(LL.StartPoint, Math.PI / 2 + angLine);*/
-
-                    //BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
-                    //以写方式打开模型空间块表记录
-                    //BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
-                    //将图形对象加入块表记录中,并返回objectid对象
-                    db.AddToModelSpace(_tmpLine);//, rectangle);
-                    //db.AddToModelSpace(_tmpLine);//, rectangle);
-                    trans.Commit();
-                    //以写
-                    
-                }
-                catch (Autodesk.AutoCAD.Runtime.Exception ex)
-                {
-                    trans.Abort();
-                    //AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
-                    ed.WriteMessage("\n救命出错了!,错误信息: \n>" + ex.Message + "<\n");
-                }
+                    try
+                    {
+                        //通过objectId找到线段,并改变颜色
+                        ObjectId _obId = db.GetObjectId(false, new Handle(Convert.ToInt64(LL.ID)), 0);
+                        Line acEnt = trans.GetObject(_obId, OpenMode.ForWrite) as Line;
+                        _currentColorIndex = acEnt.ColorIndex;
+                        acEnt.ColorIndex = 5;
+                        trans.Commit();
+                    }
+                    catch (Autodesk.AutoCAD.Runtime.Exception ex)
+                    {
+                        trans.Abort();
+                        //AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
+                        ed.WriteMessage("\n救命出错了!,错误信息: \n>" + ex.Message + "<\n");
+                    }
+                } 
             }
             m_DocumentLock.Dispose();
             
@@ -837,12 +784,123 @@ namespace Calculers
 
         private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            ed.WriteMessage("\n ContentDoubleClick\n>");
         }
 
 
 
         //public void load
+        public bool isNumberic1(string _string)
+        {
+            //是否为正整数.
+            string pattern = @"^\+?[1-9][0-9]*$";
+
+            if (Regex.IsMatch(_string, pattern))
+
+                return true;
+
+            else
+
+                return false;
+
+        }
+
+        //改变上次选中线段的颜色
+        private void dataGridView1_CurrentCellChanged(object sender, EventArgs e)
+        {
+            DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
+            int _rowNumber = _currentRows;
+            LineList LL = listOfLine[_rowNumber];
+            if (true)
+            {
+                using (Transaction trans = db.TransactionManager.StartTransaction())
+                {
+                    try
+                    {
+                        //通过objectId找到线段,并改变颜色
+                        ObjectId _obId = db.GetObjectId(false, new Handle(Convert.ToInt64(LL.ID)), 0);
+                        Line acEnt = trans.GetObject(_obId, OpenMode.ForWrite) as Line;
+                        acEnt.ColorIndex = _currentColorIndex;
+                        trans.Commit();
+                    }
+                    catch (Autodesk.AutoCAD.Runtime.Exception ex)
+                    {
+                        trans.Abort();
+                        //AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
+                        ed.WriteMessage("\n救命出错了!,错误信息: \n>" + ex.Message + "<\n");
+                    }
+                }
+            }
+            m_DocumentLock.Dispose();
+            
+        }
+
+        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            int currentCell = Convert.ToInt32(dataGridView1.CurrentCell.ColumnIndex.ToString());
+            //string contenu=dataGridView1.
+            if (currentCell <= 9 || currentCell >= 6)
+            {
+                //double NT, Np, ND, NV;
+                ed.WriteMessage("\n cellEndEdit\n>");
+                int _rowNumber = dataGridView1.CurrentCell.RowIndex;
+                ed.WriteMessage("选中第:   " + _rowNumber + "行");
+                string str = dataGridView1.Rows[_rowNumber].Cells[currentCell].Value.ToString();
+                LineList LL = listOfLine[_rowNumber];
+                switch (currentCell)
+                {
+                    case 6:
+                        if (dataGridView1.Rows[_rowNumber].Cells[6].Value.ToString() != "NA"
+                    && isNumberic1(dataGridView1.Rows[_rowNumber].Cells[6].Value.ToString()))
+                        {
+                            LL.NumTube = Convert.ToInt32(dataGridView1.Rows[_rowNumber].Cells[6].Value);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        break;
+                    case 7:
+                        if (dataGridView1.Rows[_rowNumber].Cells[7].Value.ToString() != "NA"
+                    && isNumberic1(dataGridView1.Rows[_rowNumber].Cells[7].Value.ToString()))
+                        {
+                            LL.NumTD = Convert.ToInt32(dataGridView1.Rows[_rowNumber].Cells[7].Value);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        break;
+                    case 8:
+                        if (dataGridView1.Rows[_rowNumber].Cells[8].Value.ToString() != "NA"
+                    && isNumberic1(dataGridView1.Rows[_rowNumber].Cells[8].Value.ToString()))
+                        {
+                            LL.NumTV = Convert.ToInt32(dataGridView1.Rows[_rowNumber].Cells[8].Value);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        break;
+                    case 9:
+                        if (dataGridView1.Rows[_rowNumber].Cells[9].Value.ToString() != "NA" 
+                            && isNumberic1(dataGridView1.Rows[_rowNumber].Cells[9].Value.ToString()))
+                        {
+                            LL.NumTP = Convert.ToInt32(dataGridView1.Rows[_rowNumber].Cells[9].Value);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        break;
+
+                }
+                formule.Text = "4 NumTP:" + LL.NumTP + "\r\n"
+                    + "5:NumTD  " + LL.NumTD + "\r\n"
+                    + "6 NumTV:" + LL.NumTV + "\r\n"
+                    + "7 NumTube:" + LL.NumTube + "\r\n";
+            }
+        }
+
 
 
     }

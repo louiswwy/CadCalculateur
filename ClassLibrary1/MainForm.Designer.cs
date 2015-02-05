@@ -41,6 +41,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkedListBox_Layer = new System.Windows.Forms.CheckedListBox();
             this.groupBox_1 = new System.Windows.Forms.GroupBox();
+            this.BA_Port = new System.Windows.Forms.Button();
             this.CheckBox_TD = new System.Windows.Forms.CheckBox();
             this.CheckBox_TP = new System.Windows.Forms.CheckBox();
             this.BA_ChuanLou = new System.Windows.Forms.Button();
@@ -55,9 +56,7 @@
             this.buttonSelec = new System.Windows.Forms.Button();
             this.B_ReloadLayer = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.BA_Port = new System.Windows.Forms.Button();
             this.Line_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LineStartPosition_X = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LineStartPosition_Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,10 +77,8 @@
             this.groupBox_1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -229,6 +226,14 @@
             this.groupBox_1.TabStop = false;
             this.groupBox_1.Text = "画图";
             // 
+            // BA_Port
+            // 
+            this.BA_Port.Location = new System.Drawing.Point(9, 98);
+            this.BA_Port.Name = "BA_Port";
+            this.BA_Port.Size = new System.Drawing.Size(30, 27);
+            this.BA_Port.TabIndex = 19;
+            this.BA_Port.UseVisualStyleBackColor = true;
+            // 
             // CheckBox_TD
             // 
             this.CheckBox_TD.AutoSize = true;
@@ -375,28 +380,17 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.dataGridView2);
+            this.splitContainer2.Panel1.BackColor = System.Drawing.SystemColors.HotTrack;
             // 
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.dataGridView1);
             this.splitContainer2.Size = new System.Drawing.Size(311, 477);
-            this.splitContainer2.SplitterDistance = 187;
+            this.splitContainer2.SplitterDistance = 47;
             this.splitContainer2.TabIndex = 2;
-            // 
-            // dataGridView2
-            // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(311, 187);
-            this.dataGridView2.TabIndex = 1;
-            this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
             // 
             // dataGridView1
             // 
-            this.dataGridView1.AllowUserToOrderColumns = true;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Line_ID,
@@ -412,21 +406,15 @@
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(311, 286);
+            this.dataGridView1.Size = new System.Drawing.Size(311, 426);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
+            this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
             this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
             this.dataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseDown);
             this.dataGridView1.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseUp);
+            this.dataGridView1.CurrentCellChanged += new System.EventHandler(this.dataGridView1_CurrentCellChanged);
             this.dataGridView1.Click += new System.EventHandler(this.dataGridView1_Click);
-            // 
-            // BA_Port
-            // 
-            this.BA_Port.Location = new System.Drawing.Point(9, 98);
-            this.BA_Port.Name = "BA_Port";
-            this.BA_Port.Size = new System.Drawing.Size(30, 27);
-            this.BA_Port.TabIndex = 19;
-            this.BA_Port.UseVisualStyleBackColor = true;
             // 
             // Line_ID
             // 
@@ -508,11 +496,9 @@
             this.groupBox_1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
-            this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -537,7 +523,6 @@
         private System.Windows.Forms.Button Button_In;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.GroupBox groupBox_1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
