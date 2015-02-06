@@ -38,11 +38,14 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.B_DrawLine = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.B_ReloadLayer = new System.Windows.Forms.Button();
             this.checkedListBox_Layer = new System.Windows.Forms.CheckedListBox();
             this.groupBox_1 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.B_DrawLine = new System.Windows.Forms.Button();
             this.BA_Port = new System.Windows.Forms.Button();
+            this.T_etage = new System.Windows.Forms.TextBox();
             this.CheckBox_TD = new System.Windows.Forms.CheckBox();
             this.CheckBox_TP = new System.Windows.Forms.CheckBox();
             this.BA_ChuanLou = new System.Windows.Forms.Button();
@@ -54,7 +57,6 @@
             this.Button_End = new System.Windows.Forms.Button();
             this.Button_In = new System.Windows.Forms.Button();
             this.buttonSelec = new System.Windows.Forms.Button();
-            this.B_ReloadLayer = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Line_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -67,6 +69,8 @@
             this.NumLine_TD = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NumLine_Tv = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NumLine_TP = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Num_Etage = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -80,6 +84,7 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Num_Etage)).BeginInit();
             this.SuspendLayout();
             // 
             // Combobox_Layer
@@ -177,7 +182,6 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.B_DrawLine);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.groupBox_1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -187,16 +191,6 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // B_DrawLine
-            // 
-            this.B_DrawLine.Location = new System.Drawing.Point(204, 108);
-            this.B_DrawLine.Name = "B_DrawLine";
-            this.B_DrawLine.Size = new System.Drawing.Size(75, 23);
-            this.B_DrawLine.TabIndex = 11;
-            this.B_DrawLine.Text = "画线(?)";
-            this.B_DrawLine.UseVisualStyleBackColor = true;
-            this.B_DrawLine.Click += new System.EventHandler(this.B_DrawLine_Click);
             // 
             // groupBox1
             // 
@@ -211,6 +205,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "图层";
             // 
+            // B_ReloadLayer
+            // 
+            this.B_ReloadLayer.Location = new System.Drawing.Point(9, 156);
+            this.B_ReloadLayer.Name = "B_ReloadLayer";
+            this.B_ReloadLayer.Size = new System.Drawing.Size(22, 23);
+            this.B_ReloadLayer.TabIndex = 10;
+            this.B_ReloadLayer.Text = "button1";
+            this.B_ReloadLayer.UseVisualStyleBackColor = true;
+            this.B_ReloadLayer.Click += new System.EventHandler(this.B_ReloadLayer_Click);
+            // 
             // checkedListBox_Layer
             // 
             this.checkedListBox_Layer.FormattingEnabled = true;
@@ -222,7 +226,12 @@
             // 
             // groupBox_1
             // 
+            this.groupBox_1.Controls.Add(this.label6);
+            this.groupBox_1.Controls.Add(this.Num_Etage);
+            this.groupBox_1.Controls.Add(this.label5);
+            this.groupBox_1.Controls.Add(this.B_DrawLine);
             this.groupBox_1.Controls.Add(this.BA_Port);
+            this.groupBox_1.Controls.Add(this.T_etage);
             this.groupBox_1.Controls.Add(this.CheckBox_TD);
             this.groupBox_1.Controls.Add(this.CheckBox_TP);
             this.groupBox_1.Controls.Add(this.BA_ChuanLou);
@@ -233,23 +242,50 @@
             this.groupBox_1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.groupBox_1.Location = new System.Drawing.Point(6, 6);
             this.groupBox_1.Name = "groupBox_1";
-            this.groupBox_1.Size = new System.Drawing.Size(152, 191);
+            this.groupBox_1.Size = new System.Drawing.Size(335, 191);
             this.groupBox_1.TabIndex = 14;
             this.groupBox_1.TabStop = false;
             this.groupBox_1.Text = "画图";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(76, 22);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(31, 13);
+            this.label5.TabIndex = 21;
+            this.label5.Text = "楼层";
+            // 
+            // B_DrawLine
+            // 
+            this.B_DrawLine.Location = new System.Drawing.Point(9, 101);
+            this.B_DrawLine.Name = "B_DrawLine";
+            this.B_DrawLine.Size = new System.Drawing.Size(61, 32);
+            this.B_DrawLine.TabIndex = 11;
+            this.B_DrawLine.Text = "画线(?)";
+            this.B_DrawLine.UseVisualStyleBackColor = true;
+            this.B_DrawLine.Click += new System.EventHandler(this.B_DrawLine_Click);
+            // 
             // BA_Port
             // 
-            this.BA_Port.Location = new System.Drawing.Point(9, 98);
+            this.BA_Port.Location = new System.Drawing.Point(135, 101);
             this.BA_Port.Name = "BA_Port";
-            this.BA_Port.Size = new System.Drawing.Size(30, 27);
+            this.BA_Port.Size = new System.Drawing.Size(61, 30);
             this.BA_Port.TabIndex = 19;
             this.BA_Port.UseVisualStyleBackColor = true;
+            // 
+            // T_etage
+            // 
+            this.T_etage.Location = new System.Drawing.Point(9, 19);
+            this.T_etage.Name = "T_etage";
+            this.T_etage.Size = new System.Drawing.Size(61, 20);
+            this.T_etage.TabIndex = 20;
+            this.T_etage.TextChanged += new System.EventHandler(this.T_etage_TextChanged);
             // 
             // CheckBox_TD
             // 
             this.CheckBox_TD.AutoSize = true;
-            this.CheckBox_TD.Location = new System.Drawing.Point(47, 144);
+            this.CheckBox_TD.Location = new System.Drawing.Point(204, 147);
             this.CheckBox_TD.Name = "CheckBox_TD";
             this.CheckBox_TD.Size = new System.Drawing.Size(65, 17);
             this.CheckBox_TD.TabIndex = 18;
@@ -260,7 +296,7 @@
             // CheckBox_TP
             // 
             this.CheckBox_TP.AutoSize = true;
-            this.CheckBox_TP.Location = new System.Drawing.Point(48, 121);
+            this.CheckBox_TP.Location = new System.Drawing.Point(205, 124);
             this.CheckBox_TP.Name = "CheckBox_TP";
             this.CheckBox_TP.Size = new System.Drawing.Size(64, 17);
             this.CheckBox_TP.TabIndex = 17;
@@ -270,9 +306,9 @@
             // 
             // BA_ChuanLou
             // 
-            this.BA_ChuanLou.Location = new System.Drawing.Point(9, 57);
+            this.BA_ChuanLou.Location = new System.Drawing.Point(135, 52);
             this.BA_ChuanLou.Name = "BA_ChuanLou";
-            this.BA_ChuanLou.Size = new System.Drawing.Size(30, 30);
+            this.BA_ChuanLou.Size = new System.Drawing.Size(61, 30);
             this.BA_ChuanLou.TabIndex = 6;
             this.BA_ChuanLou.UseVisualStyleBackColor = true;
             this.BA_ChuanLou.Click += new System.EventHandler(this.BA_ChuanLou_Click);
@@ -280,7 +316,7 @@
             // CheckBox_TV
             // 
             this.CheckBox_TV.AutoSize = true;
-            this.CheckBox_TV.Location = new System.Drawing.Point(48, 98);
+            this.CheckBox_TV.Location = new System.Drawing.Point(205, 101);
             this.CheckBox_TV.Name = "CheckBox_TV";
             this.CheckBox_TV.Size = new System.Drawing.Size(64, 17);
             this.CheckBox_TV.TabIndex = 16;
@@ -291,7 +327,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(45, 66);
+            this.label4.Location = new System.Drawing.Point(212, 62);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 13);
             this.label4.TabIndex = 1;
@@ -299,9 +335,9 @@
             // 
             // BA_RuKou
             // 
-            this.BA_RuKou.Location = new System.Drawing.Point(9, 19);
+            this.BA_RuKou.Location = new System.Drawing.Point(9, 52);
             this.BA_RuKou.Name = "BA_RuKou";
-            this.BA_RuKou.Size = new System.Drawing.Size(30, 32);
+            this.BA_RuKou.Size = new System.Drawing.Size(61, 32);
             this.BA_RuKou.TabIndex = 5;
             this.BA_RuKou.UseVisualStyleBackColor = true;
             this.BA_RuKou.Click += new System.EventHandler(this.BA_RuKou_Click);
@@ -309,7 +345,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(45, 29);
+            this.label3.Location = new System.Drawing.Point(76, 62);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 0;
@@ -361,16 +397,6 @@
             this.buttonSelec.UseVisualStyleBackColor = true;
             this.buttonSelec.Click += new System.EventHandler(this.buttonSelec_Click);
             // 
-            // B_ReloadLayer
-            // 
-            this.B_ReloadLayer.Location = new System.Drawing.Point(9, 156);
-            this.B_ReloadLayer.Name = "B_ReloadLayer";
-            this.B_ReloadLayer.Size = new System.Drawing.Size(22, 23);
-            this.B_ReloadLayer.TabIndex = 10;
-            this.B_ReloadLayer.Text = "button1";
-            this.B_ReloadLayer.UseVisualStyleBackColor = true;
-            this.B_ReloadLayer.Click += new System.EventHandler(this.B_ReloadLayer_Click);
-            // 
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -386,7 +412,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.dataGridView1);
             this.splitContainer2.Size = new System.Drawing.Size(311, 477);
-            this.splitContainer2.SplitterDistance = 47;
+            this.splitContainer2.SplitterDistance = 92;
             this.splitContainer2.TabIndex = 2;
             // 
             // dataGridView1
@@ -404,9 +430,10 @@
             this.NumLine_Tv,
             this.NumLine_TP});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.GridColor = System.Drawing.SystemColors.ActiveCaption;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(311, 426);
+            this.dataGridView1.Size = new System.Drawing.Size(311, 381);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
             this.dataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseDown);
@@ -469,6 +496,23 @@
             this.NumLine_TP.HeaderText = "Num_TP";
             this.NumLine_TP.Name = "NumLine_TP";
             // 
+            // Num_Etage
+            // 
+            this.Num_Etage.Location = new System.Drawing.Point(135, 20);
+            this.Num_Etage.Name = "Num_Etage";
+            this.Num_Etage.Size = new System.Drawing.Size(61, 20);
+            this.Num_Etage.TabIndex = 22;
+            this.Num_Etage.ValueChanged += new System.EventHandler(this.Num_Etage_ValueChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(202, 22);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(67, 13);
+            this.label6.TabIndex = 23;
+            this.label6.Text = "现在的楼层";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -496,6 +540,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Num_Etage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -542,5 +587,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_TD;
         private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_Tv;
         private System.Windows.Forms.DataGridViewTextBoxColumn NumLine_TP;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox T_etage;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown Num_Etage;
     }
 }

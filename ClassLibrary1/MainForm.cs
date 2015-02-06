@@ -33,18 +33,20 @@ namespace Calculers
             get;
             set;
         }
-
+        //选中的图层层号
         public int _selectLayerNum
         {
             get;
             set;
         }
-
+        //选中图层层名
         public List<string> _selectLayerNom
         {
             get;
             set;
         }
+
+        //自定义'线表'类
         /// <summary>
         /// 
         /// </summary>
@@ -135,7 +137,20 @@ namespace Calculers
             }
         }
 
+        //
         List<LineList> listOfLine =new List<LineList>();
+
+        //点一,点二,层数; 点一<->点二的值为距离, 点一<->层 和 点二<->层 值为null
+        int[][][] MatrixOfVertex = null;
+        Point2d EntrePoint;
+        Point2d MontreDecendPort;
+
+        Point2d EntPortTV;        
+        Point2d EntPortTD;
+        Point2d EntPortTP;
+
+        //未记录的端口
+        List<Point2d> UnVisitedPort;
 
         public MainForm()
         {
@@ -150,6 +165,8 @@ namespace Calculers
             //显示所有图层
             loadLayer();
             loadDefautBlock();
+            //楼层数从1开始记
+            Num_Etage.Minimum = 1;
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -385,37 +402,7 @@ namespace Calculers
         }
         #endregion
 
-        private void B_DrawLine_Click(object sender, EventArgs e)
-        {
-            DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
-            // Start a transaction
-            using (Transaction acTrans = db.TransactionManager.StartTransaction())
-            {
-
-                try
-                {
-                    Point3d startPoint = new Point3d();
-                    Point3d endPoint = new Point3d();
-                    if (GetPoint("\n输入起点:", out startPoint) && GetPoint("\n输入终点:", startPoint, out endPoint))
-                    {
-                        Line lin = new Line(startPoint, endPoint);
-                        db.AddToModelSpace(lin);
-                        acTrans.Commit();
-                        // 绘制管道
-                        //DrawPipe(startPoint, endPoint, 100, 70);
-                    }            
-                    // Request for objects to be selected in the drawing area
-                    //PromptSelectionResult acSSPrompt = doc.Editor.GetCommandVersion;
-                }
-                catch (Autodesk.AutoCAD.Runtime.Exception ex)
-                {
-                    AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
-                    ed.WriteMessage("出错了!,错误信息: >" + ex.Message + "<\n");
-                }                
-            }
-            m_DocumentLock.Dispose();
-        }
-
+        
         public bool GetPoint(string prompt, out Point3d pt)
         {
             Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
@@ -666,29 +653,88 @@ namespace Calculers
         
         private void BA_RuKou_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            Point3d DrawRecPoint;
-            Editor ed = doc.Editor;
-            GetPoint("\n输入起点:", out DrawRecPoint);
-            //获取长方形左上,右下的点的2d坐标
-            Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 100, DrawRecPoint.Y + 400);
-            Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 100, DrawRecPoint.Y);
-            DrawRectangle(RecStartPoint, RecEndPoint);
-            this.Show();
+            //正则表达式1-99;
+            //Regex re = new Regex(@"^[1-9]\d{0,1}$");
+            if (isNumberic1(T_etage.Text.ToString(), @"^[1-9]\d{0,1}$"))
+            {
+                //MessageBox.Show("ok");
+                this.Hide();
+                Point3d DrawRecPoint;
+                Editor ed = doc.Editor;
+                GetPoint("\n输入起点:", out DrawRecPoint);
+                //获取长方形左上,右下的点的2d坐标
+                Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 100, DrawRecPoint.Y + 400);
+                Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 100, DrawRecPoint.Y);
+                DrawRectangle(RecStartPoint, RecEndPoint, "Etage", "Etage" + Num_Etage.Value.ToString());
+                EntrePoint = new Point2d(DrawRecPoint.X, DrawRecPoint.Y);
+                this.Show();
+            }
+            else
+            {
+                AcadApp.ShowAlertDialog("需要说明楼层或格式错误.");
+            }
+            
         }
 
         private void BA_ChuanLou_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            Point3d DrawRecPoint;
-            GetPoint("\n输入起点:", out DrawRecPoint);
-            
-            //获取长方形左上,右下的点的2d坐标
-            Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 75, DrawRecPoint.Y + 300);
-            Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 75, DrawRecPoint.Y);
-            DrawRectangle(RecStartPoint, RecEndPoint);
-            this.Show();
+            if (isNumberic1(T_etage.Text.ToString(), @"^[1-9]\d{0,1}$"))
+            {
+                this.Hide();
+                Point3d DrawRecPoint;
+                GetPoint("\n输入起点:", out DrawRecPoint);
+
+                //获取长方形左上,右下的点的2d坐标
+                Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 75, DrawRecPoint.Y + 300);
+                Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 75, DrawRecPoint.Y);
+                DrawRectangle(RecStartPoint, RecEndPoint);
+                this.Show();
+            }
+            else
+            {
+                AcadApp.ShowAlertDialog("需要说明楼层或格式错误.");
+            }
         }
+
+        private void B_DrawLine_Click(object sender, EventArgs e)
+        {
+
+            if (isNumberic1(T_etage.Text.ToString(), @"^[1-9]\d{0,1}$"))
+            {
+                DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
+                // Start a transaction
+                using (Transaction acTrans = db.TransactionManager.StartTransaction())
+                {
+
+                    try
+                    {
+                        Point3d startPoint = new Point3d();
+                        Point3d endPoint = new Point3d();
+                        if (GetPoint("\n输入起点:", out startPoint) && GetPoint("\n输入终点:", startPoint, out endPoint))
+                        {
+                            Line lin = new Line(startPoint, endPoint);
+                            db.AddToModelSpace(lin);
+                            acTrans.Commit();
+                            // 绘制管道
+                            //DrawPipe(startPoint, endPoint, 100, 70);
+                        }
+                        // Request for objects to be selected in the drawing area
+                        //PromptSelectionResult acSSPrompt = doc.Editor.GetCommandVersion;
+                    }
+                    catch (Autodesk.AutoCAD.Runtime.Exception ex)
+                    {
+                        AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
+                        ed.WriteMessage("出错了!,错误信息: >" + ex.Message + "<\n");
+                    }
+                }
+                m_DocumentLock.Dispose(); 
+            }
+            else
+            {
+                AcadApp.ShowAlertDialog("需要说明楼层或格式错误.");
+            }
+        }
+
 
         //画长方形
         public void DrawRectangle(Point2d StartPt,Point2d EndPoint)
@@ -707,6 +753,49 @@ namespace Calculers
                 BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
                 //将图形对象加入块表记录中,并返回objectid对象
                 db.AddToModelSpace(rectangle);
+                trans.Commit();
+            }
+            m_DocumentLock.Dispose();
+        }
+
+
+        //生成带扩展信息的长方形
+        public void DrawRectangle(Point2d StartPt, Point2d EndPoint,string regAppName,string XData)
+        {
+            DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
+            //获取用户在文件上选定的点坐标
+
+            //Rectangle3d rect = new Rectangle3d()
+            //生成长方形图
+            Polyline rectangle = new Polyline();
+            rectangle.CreateRectangle(StartPt, EndPoint);
+            using (Transaction trans = db.TransactionManager.StartTransaction())
+            {
+                BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
+                //以写方式打开模型空间块表记录
+                BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+
+                //获取数据库中注册应用程序表
+                RegAppTable regTable = (RegAppTable)db.RegAppTableId.GetObject(OpenMode.ForWrite);
+                //如果不存在则新建
+                if (!regTable.Has(regAppName))
+                {
+                    //创建一个注册应用程序表记录用来表示扩展数据
+                    RegAppTableRecord regRecord = new RegAppTableRecord();
+                    regRecord.Name = regAppName;
+                    //在注册应用程序表中加入扩展数据,并通知事务处理
+                    regTable.Add(regRecord);
+                }
+                //将扩展数据的应用程序名添加到扩展数据项列表的第一项
+                //将图形对象加入块表记录中,并返回objectid对象
+                TypedValueList typeValue = new TypedValueList();
+                typeValue.Insert(0, new TypedValue((int)DxfCode.ExtendedDataRegAppName, regAppName));
+                typeValue.Add(DxfCode.ExtendedDataAsciiString, XData);
+                rectangle.XData = (typeValue);
+                //
+                
+                db.AddToModelSpace(rectangle);
+
                 trans.Commit();
             }
             m_DocumentLock.Dispose();
@@ -866,6 +955,19 @@ namespace Calculers
                 return false;
 
         }
+        public bool isNumberic1(string _string, string pattern)
+        {
+            //是否为正整数.
+            //string pattern = @"^\+?[1-9][0-9]*$";
+            if (Regex.IsMatch(_string, pattern))
+
+                return true;
+
+            else
+
+                return false;
+
+        }
 
         public void loadLayer()
         {
@@ -883,6 +985,22 @@ namespace Calculers
                     checkedListBox_Layer.Items.Add(layer);
                 }
             }
+        }
+
+        private void T_etage_TextChanged(object sender, EventArgs e)
+        {
+            if (isNumberic1(T_etage.Text.ToString(), @"^[1-9]\d{0,1}$"))
+            {
+                Num_Etage.Visible = true;
+                Num_Etage.Enabled = true;
+                Num_Etage.Maximum = Convert.ToInt32(T_etage.Text.ToString());                
+            }
+        }
+
+        private void Num_Etage_ValueChanged(object sender, EventArgs e)
+        {
+            string a=Num_Etage.Value.ToString();
+            MessageBox.Show(a);
         }
     }
 }
