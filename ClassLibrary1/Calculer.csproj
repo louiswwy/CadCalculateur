@@ -97,6 +97,7 @@
     <Folder Include="Block\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\Image1.bmp" />
     <Content Include="图标\Bitmap1.bmp" />
     <Content Include="图标\Icon1.ico" />

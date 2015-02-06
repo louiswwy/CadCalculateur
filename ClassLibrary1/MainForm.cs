@@ -158,91 +158,15 @@ namespace Calculers
             CalculerLine._IsShow = false;
         }
 
-        public void loadLayer()
-        {
-            //显示所有layer
-            using (Transaction trans = db.TransactionManager.StartTransaction())
-            {
-                layers = (from layer in db.GetAllLayers()
-                          select layer.Name).ToList();
-                //LayerC.Items.Add(layers);
-                //combobox
-                Combobox_Layer.DataSource = layers;
-                //checklistbox
-                foreach (string layer in layers)
-                {
-                    checkedListBox_Layer.Items.Add(layer);
-                }
-            }
-        }
         
         private void LayerC_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            
-            ObjectId layerId;
-            #region 选定图层
-            if (Combobox_Layer.SelectedIndex >= 0)
-            {
 
-                using (Transaction trans = db.TransactionManager.StartTransaction())
-                {
-                    try
-                    {
-                        LayerTable lt = (LayerTable)db.LayerTableId.GetObject(OpenMode.ForRead);
-
-                        layerId = lt[layers[Combobox_Layer.SelectedIndex].ToString()]; //选中图层的id
-
-                        db.Clayer = layerId;  //将选中图层设为当前图层
-
-                        trans.Commit();     //确认
-                    }
-
-                    catch (Autodesk.AutoCAD.Runtime.Exception ex)
-                    {
-                        ed.WriteMessage(ex.Message + "\n");
-                    }
-
-                }
-            }
-            #endregion
-            //selectedLine();
 
         }
 
-        public string selectedLine()
-        {
-            //选中的图层名称
-            //foreach(string selectlayer)
-            //selectLayer = layers[LayerC.SelectedIndex].ToString();
-            //生成树图中主节点
-            TreeNode MainNode = new TreeNode();
-            MainNode.Text = layers[Combobox_Layer.SelectedIndex].ToString(); //图层名称
-            treeView1.Nodes.Add(MainNode);
-
-            //树图中line类型线段
-            TreeNode NodeLine = new TreeNode();
-            NodeLine.Text = "Level 1";
-            MainNode.Nodes.Add(NodeLine);
-
-            //树图中Pling类线段
-            TreeNode NodePl = new TreeNode();
-            NodePl.Text = "Level 2";
-            MainNode.Nodes.Add(NodePl);
-
-            //树图中MLine类线段
-            TreeNode NodeMl = new TreeNode();
-            NodeMl.Text = "Level 2";
-            MainNode.Nodes.Add(NodeMl);
-            return null;
-        }
-
-        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {            
-            //for (int j = 0; j < checkedListBox1.Items.Count; j++)
-            //    checkedListBox1.SetItemChecked(j, false); 
-            
-           
-        }
+        
+        #region 第一种方法,手动制定每两个节点间线缆/钢管数量
         /// <summary>
         /// 使用了:
         /// DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
@@ -291,10 +215,10 @@ namespace Calculers
                                 //listLines = acEnt;
                                 //AcadApp.ShowAlertDialog("length: " + acEnt.Length.ToString());
 
-                                LineList SelectedLine = new LineList(acEnt.ObjectId.Handle.Value.ToString()
+                                LineList _SelectedLine = new LineList(acEnt.ObjectId.Handle.Value.ToString()
                                     , acEnt.GetType().ToString(), acEnt.StartPoint, acEnt.EndPoint, acEnt.Length);
 
-                                listOfLine.Add(SelectedLine);
+                                listOfLine.Add(_SelectedLine);
 
                                 i++;
                             }
@@ -304,7 +228,7 @@ namespace Calculers
                 }
                 catch (Autodesk.AutoCAD.Runtime.Exception ex)
                 {
-                    AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
+                    //AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
                     ed.WriteMessage("出错了!,错误信息: >" + ex.Message + "<\n");
                 }
             }
@@ -322,14 +246,6 @@ namespace Calculers
                 node.Nodes.Add(node1);//node下的两个子节点。
             }
             FillUpDataGrid();
-
-            TreeNode node11 = new TreeNode();
-            node11.Text = "hopeoneone";
-            node.Nodes.Add(node11);//在node1下面在添加一个结点。
-
-            TreeNode node2 = new TreeNode();
-            node2.Text = "hopetwo";   
-            node.Nodes.Add(node2);
             //////////
             m_DocumentLock.Dispose();
         }
@@ -379,54 +295,12 @@ namespace Calculers
            
         }
         #endregion
-        private void B_ReloadLayer_Click(object sender, EventArgs e)
-        {
-            checkedListBox_Layer.Items.Clear();
-            loadLayer();
-        }
-        string strCollected = string.Empty;
-        private void checkedListBox_Layer_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            int a = 0;
-            for (int i = 0; i < checkedListBox_Layer.Items.Count; i++)
-            {
-                if (checkedListBox_Layer.GetItemChecked(i))
-                {
-                    a++;
-                    /*try
-                    {
-                        //checkedListBox_Layer = Convert.ToInt32(checkedListBox_Layer.CheckedItems.Count);
-                        //string temp = _selectLayer.Find(delegate(checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i])));
-                        if (true)
-                        {
-                            if (strCollected == string.Empty)
-                            {
-                                AcadApp.ShowAlertDialog("为空" );
-                                strCollected = checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i]);
-                            }
-                            else if (!strCollected.Contains(checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i])))
-                            {
-                                AcadApp.ShowAlertDialog("添加:" );
-                                strCollected = strCollected + "/" + checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i]);
-                            }
-                            
-                        }
-                    }
-                    catch (Autodesk.AutoCAD.Runtime.Exception ex)
-                    {
-                        AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
-                    }*/
-                }
-            }
-            MessageBox.Show("" + a);
-        }
 
-        //计算线总长度
         private void ButtonV_Click(object sender, EventArgs e)
         {
             formule.Text = "";
             //总长度
-            double _SumLinesLength=new double();
+            double _SumLinesLength = new double();
             //不同线缆和钢管的长度
             double _sumTubeLength = 0;
             double _sumTDLength = 0;
@@ -450,7 +324,7 @@ namespace Calculers
             {
                 //在textbox中的显示各线段的长度
                 string _LineLength = "";
-                
+
                 //AcadApp.ShowAlertDialog("i:" + i + ":" + _line.LengthLine);
                 _SumLinesLength = _line.LengthLine + _SumLinesLength;
                 //计算每段线的长度
@@ -470,7 +344,7 @@ namespace Calculers
                         + "TD" + i + "长:  " + _sumTDLength + "\r\n"
                         + "TP" + i + "长:  " + _sumTPLength + "\r\n"
                         + "TV" + i + "长:  " + _sumTVLength + "\r\n";
-                        
+
                     //所有线段的长度
                     _ResumeLineLength = _ResumeLineLength + _LineLength;
 
@@ -487,10 +361,17 @@ namespace Calculers
             //formule.Text = "选中线段长度为:" + SumLinesLength.ToString();
         }
 
+
+        string strCollected = string.Empty;
+        
+
+        //计算线总长度
+
+        #region 画图 (弃用)
         private void ButtonM_Click(object sender, EventArgs e)
         {
             
-            Form1_Paint(this, new PaintEventArgs(CreateGraphics(), ClientRectangle));
+            //Form1_Paint(this, new PaintEventArgs(CreateGraphics(), ClientRectangle));
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
@@ -502,6 +383,7 @@ namespace Calculers
                 (Pens.Black, new Point(-splitContainer1.Panel2.Left, -splitContainer1.Panel2.Top),
                 new Point(ClientRectangle.Width - splitContainer1.Panel2.Left, ClientRectangle.Height - splitContainer1.Panel2.Top));
         }
+        #endregion
 
         private void B_DrawLine_Click(object sender, EventArgs e)
         {
@@ -635,113 +517,12 @@ namespace Calculers
 
         }
 
-        private void BA_RuKou_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            Point3d DrawRecPoint;
-            Editor ed = doc.Editor;
-            GetPoint("\n输入起点:", out DrawRecPoint);
-            //获取长方形左上,右下的点的2d坐标
-            Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 100, DrawRecPoint.Y + 400);
-            Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 100, DrawRecPoint.Y);
-            DrawRectangle(RecStartPoint, RecEndPoint);
-            this.Show();
-        }
-        private void BA_ChuanLou_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            Point3d DrawRecPoint;
-            GetPoint("\n输入起点:", out DrawRecPoint);
-            
-            //获取长方形左上,右下的点的2d坐标
-            Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 75, DrawRecPoint.Y + 300);
-            Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 75, DrawRecPoint.Y);
-            DrawRectangle(RecStartPoint, RecEndPoint);
-            this.Show();
-        }
-
-        public void DrawRectangle(Point2d StartPt,Point2d EndPoint)
-        {
-            DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
-            //获取用户在文件上选定的点坐标
-
-            //Rectangle3d rect = new Rectangle3d()
-            //生成长方形图
-            Polyline rectangle = new Polyline();
-            rectangle.CreateRectangle(StartPt, EndPoint);
-            using (Transaction trans = db.TransactionManager.StartTransaction())
-            {
-                BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
-                //以写方式打开模型空间块表记录
-                BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
-                //将图形对象加入块表记录中,并返回objectid对象
-                db.AddToModelSpace(rectangle);
-                trans.Commit();
-            }
-            m_DocumentLock.Dispose();
-        }
-
-        //每次checkbox值变更,重新生成插座块的扩展属性.
-        private void CheckBox_TP_CheckedChanged(object sender, EventArgs e)
-        {
-            loadDefautBlock();
-        }
-        //每次checkbox值变更,重新生成插座块的扩展属性.
-        private void CheckBox_TD_CheckedChanged(object sender, EventArgs e)
-        {
-            loadDefautBlock();
-        }
-        //每次checkbox值变更,重新生成插座块的扩展属性.
-        private void CheckBox_TV_CheckedChanged(object sender, EventArgs e)
-        {
-            loadDefautBlock();
-        }
-        //载入默认图块.
-        public void loadDefautBlock()
-        {
-            int _checkTp = 0; int _checkTd = 0; int _checkTv = 0; int _totalCheck = 0;
-            //PromptFileNameResult Fresult=ed.GetFileNameForOpen("");
-            //MessageBox.Show("+" + Fresult.StringResult);
-            //string fillPath="*\Block";
-            if (CheckBox_TD.Checked == true) { _checkTd = 1; } else { _checkTd = 0; }
-            if (CheckBox_TP.Checked == true) { _checkTp = 1; } else { _checkTp = 0; }
-            if (CheckBox_TV.Checked == true) { _checkTv = 1; } else { _checkTv = 0; }
-            _totalCheck = _checkTp + _checkTd + _checkTv;
-        }
-        
-        private void dataGridView1_Click(object sender, EventArgs e)
-        {
-            
-            
-        }
-        //为显示效果而添加的线段
-        private void dataGridView1_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            /*DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
-            
-            ed.WriteMessage("\n 放开 \n>");
-            using (Transaction trans = db.TransactionManager.StartTransaction())
-            {
-                try
-                {                
-                    //DBObject ent = _tempEntId.GetObject(OpenMode.ForWrite);
-                    //Entity ent = (Entity)_tempEntId.GetObject(OpenMode.ForWrite);
-
-                    //ent.Erase();
-                    //trans.Commit();
-                    //ent.DowngradeOpen();
-                }
-                catch (Autodesk.AutoCAD.Runtime.Exception ex)
-                {
-                    ed.WriteMessage("\n救命出错了!,错误信息: \n>" + ex.Message + "<\n");
-                    trans.Abort();
-                }
-            }
-            m_DocumentLock.Dispose();*/
-        }
-
-        int _currentRows;
-        int _currentColorIndex = 0;
+        //datagridview中选中一行数据时,将cad中对应的线段变色
+        /// <summary>
+        /// 在datagridview(表格)中选中一行数据时,将cad中对应的线段变色
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dataGridView1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
             ed.WriteMessage("\n MouseDown \n>");
@@ -751,7 +532,7 @@ namespace Calculers
             ed.WriteMessage("选中第:   " + _rowNumber + "行");
             LineList LL = listOfLine[_rowNumber];
             ed.WriteMessage("选中实体id为:   " + LL.ID + "<");
-            if (true)             
+            if (true)
             {
                 using (Transaction trans = db.TransactionManager.StartTransaction())
                 {
@@ -770,41 +551,15 @@ namespace Calculers
                         //AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
                         ed.WriteMessage("\n救命出错了!,错误信息: \n>" + ex.Message + "<\n");
                     }
-                } 
+                }
             }
             m_DocumentLock.Dispose();
-            
-        }
-
-        private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-
-            ed.WriteMessage("\n click\n>");
-        }
-
-        private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
-
-
-
-        //public void load
-        public bool isNumberic1(string _string)
-        {
-            //是否为正整数.
-            string pattern = @"^\+?[1-9][0-9]*$";
-
-            if (Regex.IsMatch(_string, pattern))
-
-                return true;
-
-            else
-
-                return false;
 
         }
 
-        //改变上次选中线段的颜色
+        int _currentRows;
+        int _currentColorIndex = 0;
+        //改变上次选中线段的颜色  并没有屁用
         private void dataGridView1_CurrentCellChanged(object sender, EventArgs e)
         {
             DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
@@ -831,9 +586,14 @@ namespace Calculers
                 }
             }
             m_DocumentLock.Dispose();
-            
+
         }
 
+        /// <summary>
+        /// 在表格中定义两结点间线缆/钢管的数量
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             int currentCell = Convert.ToInt32(dataGridView1.CurrentCell.ColumnIndex.ToString());
@@ -882,7 +642,7 @@ namespace Calculers
                         }
                         break;
                     case 9:
-                        if (dataGridView1.Rows[_rowNumber].Cells[9].Value.ToString() != "NA" 
+                        if (dataGridView1.Rows[_rowNumber].Cells[9].Value.ToString() != "NA"
                             && isNumberic1(dataGridView1.Rows[_rowNumber].Cells[9].Value.ToString()))
                         {
                             LL.NumTP = Convert.ToInt32(dataGridView1.Rows[_rowNumber].Cells[9].Value);
@@ -900,8 +660,229 @@ namespace Calculers
                     + "7 NumTube:" + LL.NumTube + "\r\n";
             }
         }
+        #endregion
+
+        #region 方法二,画线后自动计数;
+        
+        private void BA_RuKou_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Point3d DrawRecPoint;
+            Editor ed = doc.Editor;
+            GetPoint("\n输入起点:", out DrawRecPoint);
+            //获取长方形左上,右下的点的2d坐标
+            Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 100, DrawRecPoint.Y + 400);
+            Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 100, DrawRecPoint.Y);
+            DrawRectangle(RecStartPoint, RecEndPoint);
+            this.Show();
+        }
+
+        private void BA_ChuanLou_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Point3d DrawRecPoint;
+            GetPoint("\n输入起点:", out DrawRecPoint);
+            
+            //获取长方形左上,右下的点的2d坐标
+            Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 75, DrawRecPoint.Y + 300);
+            Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 75, DrawRecPoint.Y);
+            DrawRectangle(RecStartPoint, RecEndPoint);
+            this.Show();
+        }
+
+        //画长方形
+        public void DrawRectangle(Point2d StartPt,Point2d EndPoint)
+        {
+            DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
+            //获取用户在文件上选定的点坐标
+
+            //Rectangle3d rect = new Rectangle3d()
+            //生成长方形图
+            Polyline rectangle = new Polyline();
+            rectangle.CreateRectangle(StartPt, EndPoint);
+            using (Transaction trans = db.TransactionManager.StartTransaction())
+            {
+                BlockTable bt = (BlockTable)trans.GetObject(db.BlockTableId, OpenMode.ForRead);
+                //以写方式打开模型空间块表记录
+                BlockTableRecord btr = (BlockTableRecord)trans.GetObject(bt[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+                //将图形对象加入块表记录中,并返回objectid对象
+                db.AddToModelSpace(rectangle);
+                trans.Commit();
+            }
+            m_DocumentLock.Dispose();
+        }
+
+        //每次checkbox值变更,重新生成插座块的扩展属性.
+        private void CheckBox_TP_CheckedChanged(object sender, EventArgs e)
+        {
+            loadDefautBlock();
+        }
+        //每次checkbox值变更,重新生成插座块的扩展属性.
+        private void CheckBox_TD_CheckedChanged(object sender, EventArgs e)
+        {
+            loadDefautBlock();
+        }
+        //每次checkbox值变更,重新生成插座块的扩展属性.
+        private void CheckBox_TV_CheckedChanged(object sender, EventArgs e)
+        {
+            loadDefautBlock();
+        }
+        //载入默认图块.
+        public void loadDefautBlock()
+        {
+            int _checkTp = 0; int _checkTd = 0; int _checkTv = 0; int _totalCheck = 0;
+            //PromptFileNameResult Fresult=ed.GetFileNameForOpen("");
+            //MessageBox.Show("+" + Fresult.StringResult);
+            //string fillPath="*\Block";
+            if (CheckBox_TD.Checked == true) { _checkTd = 1; } else { _checkTd = 0; }
+            if (CheckBox_TP.Checked == true) { _checkTp = 1; } else { _checkTp = 0; }
+            if (CheckBox_TV.Checked == true) { _checkTv = 1; } else { _checkTv = 0; }
+            _totalCheck = _checkTp + _checkTd + _checkTv;
+        }
+
+
+        //为显示效果而添加的线段
+        #endregion
 
 
 
+
+
+
+
+        private void Combobox_Layer_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+
+            ObjectId layerId;
+            #region 选定图层
+            if (Combobox_Layer.SelectedIndex >= 0)
+            {
+
+                using (Transaction trans = db.TransactionManager.StartTransaction())
+                {
+                    try
+                    {
+                        LayerTable lt = (LayerTable)db.LayerTableId.GetObject(OpenMode.ForRead);
+
+                        layerId = lt[layers[Combobox_Layer.SelectedIndex].ToString()]; //选中图层的id
+
+                        db.Clayer = layerId;  //将选中图层设为当前图层
+
+                        trans.Commit();     //确认
+                    }
+
+                    catch (Autodesk.AutoCAD.Runtime.Exception ex)
+                    {
+                        ed.WriteMessage(ex.Message + "\n");
+                    }
+
+                }
+            }
+            #endregion
+            //selectedLine();
+        }
+
+        private void checkedListBox_Layer_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            int a = 0;
+            for (int i = 0; i < checkedListBox_Layer.Items.Count; i++)
+            {
+                if (checkedListBox_Layer.GetItemChecked(i))
+                {
+                    a++;
+                    /*try
+                    {
+                        //checkedListBox_Layer = Convert.ToInt32(checkedListBox_Layer.CheckedItems.Count);
+                        //string temp = _selectLayer.Find(delegate(checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i])));
+                        if (true)
+                        {
+                            if (strCollected == string.Empty)
+                            {
+                                AcadApp.ShowAlertDialog("为空" );
+                                strCollected = checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i]);
+                            }
+                            else if (!strCollected.Contains(checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i])))
+                            {
+                                AcadApp.ShowAlertDialog("添加:" );
+                                strCollected = strCollected + "/" + checkedListBox_Layer.GetItemText(checkedListBox_Layer.Items[i]);
+                            }
+                            
+                        }
+                    }
+                    catch (Autodesk.AutoCAD.Runtime.Exception ex)
+                    {
+                        AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
+                    }*/
+                }
+            }
+            MessageBox.Show("" + a);
+        }
+
+        private void B_ReloadLayer_Click(object sender, EventArgs e)
+        {
+            checkedListBox_Layer.Items.Clear();
+            loadLayer();
+        }
+
+        public string selectedLine()
+        {
+            //选中的图层名称
+            //foreach(string selectlayer)
+            //selectLayer = layers[LayerC.SelectedIndex].ToString();
+            //生成树图中主节点
+            TreeNode MainNode = new TreeNode();
+            MainNode.Text = layers[Combobox_Layer.SelectedIndex].ToString(); //图层名称
+            treeView1.Nodes.Add(MainNode);
+
+            //树图中line类型线段
+            TreeNode NodeLine = new TreeNode();
+            NodeLine.Text = "Level 1";
+            MainNode.Nodes.Add(NodeLine);
+
+            //树图中Pling类线段
+            TreeNode NodePl = new TreeNode();
+            NodePl.Text = "Level 2";
+            MainNode.Nodes.Add(NodePl);
+
+            //树图中MLine类线段
+            TreeNode NodeMl = new TreeNode();
+            NodeMl.Text = "Level 2";
+            MainNode.Nodes.Add(NodeMl);
+            return null;
+        }
+
+        //public void load
+        public bool isNumberic1(string _string)
+        {
+            //是否为正整数.
+            string pattern = @"^\+?[1-9][0-9]*$";
+
+            if (Regex.IsMatch(_string, pattern))
+
+                return true;
+
+            else
+
+                return false;
+
+        }
+
+        public void loadLayer()
+        {
+            //显示所有layer
+            using (Transaction trans = db.TransactionManager.StartTransaction())
+            {
+                layers = (from layer in db.GetAllLayers()
+                          select layer.Name).ToList();
+                //LayerC.Items.Add(layers);
+                //combobox
+                Combobox_Layer.DataSource = layers;
+                //checklistbox
+                foreach (string layer in layers)
+                {
+                    checkedListBox_Layer.Items.Add(layer);
+                }
+            }
+        }
     }
 }

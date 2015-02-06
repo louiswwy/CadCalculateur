@@ -38,6 +38,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.B_DrawLine = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkedListBox_Layer = new System.Windows.Forms.CheckedListBox();
             this.groupBox_1 = new System.Windows.Forms.GroupBox();
@@ -52,7 +53,6 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.Button_End = new System.Windows.Forms.Button();
             this.Button_In = new System.Windows.Forms.Button();
-            this.B_DrawLine = new System.Windows.Forms.Button();
             this.buttonSelec = new System.Windows.Forms.Button();
             this.B_ReloadLayer = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -89,7 +89,7 @@
             this.Combobox_Layer.Name = "Combobox_Layer";
             this.Combobox_Layer.Size = new System.Drawing.Size(121, 21);
             this.Combobox_Layer.TabIndex = 1;
-            this.Combobox_Layer.SelectionChangeCommitted += new System.EventHandler(this.LayerC_SelectionChangeCommitted);
+            this.Combobox_Layer.SelectionChangeCommitted += new System.EventHandler(this.Combobox_Layer_SelectionChangeCommitted);
             // 
             // ButtonM
             // 
@@ -98,7 +98,7 @@
             this.ButtonM.Name = "ButtonM";
             this.ButtonM.Size = new System.Drawing.Size(75, 23);
             this.ButtonM.TabIndex = 2;
-            this.ButtonM.Text = "减去";
+            this.ButtonM.Text = "减去?";
             this.ButtonM.UseVisualStyleBackColor = true;
             this.ButtonM.Click += new System.EventHandler(this.ButtonM_Click);
             // 
@@ -177,6 +177,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.B_DrawLine);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.groupBox_1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -187,14 +188,25 @@
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // B_DrawLine
+            // 
+            this.B_DrawLine.Location = new System.Drawing.Point(204, 108);
+            this.B_DrawLine.Name = "B_DrawLine";
+            this.B_DrawLine.Size = new System.Drawing.Size(75, 23);
+            this.B_DrawLine.TabIndex = 11;
+            this.B_DrawLine.Text = "画线(?)";
+            this.B_DrawLine.UseVisualStyleBackColor = true;
+            this.B_DrawLine.Click += new System.EventHandler(this.B_DrawLine_Click);
+            // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.B_ReloadLayer);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.Combobox_Layer);
             this.groupBox1.Controls.Add(this.checkedListBox_Layer);
             this.groupBox1.Location = new System.Drawing.Point(6, 203);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(152, 167);
+            this.groupBox1.Size = new System.Drawing.Size(152, 206);
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "图层";
@@ -311,10 +323,8 @@
             this.tabPage3.Controls.Add(this.ButtonV);
             this.tabPage3.Controls.Add(this.Button_In);
             this.tabPage3.Controls.Add(this.ButtonM);
-            this.tabPage3.Controls.Add(this.B_DrawLine);
             this.tabPage3.Controls.Add(this.label2);
             this.tabPage3.Controls.Add(this.buttonSelec);
-            this.tabPage3.Controls.Add(this.B_ReloadLayer);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(391, 431);
@@ -328,7 +338,7 @@
             this.Button_End.Name = "Button_End";
             this.Button_End.Size = new System.Drawing.Size(20, 23);
             this.Button_End.TabIndex = 13;
-            this.Button_End.Text = "button2";
+            this.Button_End.Text = "?";
             this.Button_End.UseVisualStyleBackColor = true;
             // 
             // Button_In
@@ -337,19 +347,9 @@
             this.Button_In.Name = "Button_In";
             this.Button_In.Size = new System.Drawing.Size(20, 23);
             this.Button_In.TabIndex = 12;
-            this.Button_In.Text = "button1";
+            this.Button_In.Text = "?";
             this.Button_In.UseVisualStyleBackColor = true;
             this.Button_In.Click += new System.EventHandler(this.Button_In_Click);
-            // 
-            // B_DrawLine
-            // 
-            this.B_DrawLine.Location = new System.Drawing.Point(13, 234);
-            this.B_DrawLine.Name = "B_DrawLine";
-            this.B_DrawLine.Size = new System.Drawing.Size(75, 23);
-            this.B_DrawLine.TabIndex = 11;
-            this.B_DrawLine.Text = "画线(?)";
-            this.B_DrawLine.UseVisualStyleBackColor = true;
-            this.B_DrawLine.Click += new System.EventHandler(this.B_DrawLine_Click);
             // 
             // buttonSelec
             // 
@@ -363,7 +363,7 @@
             // 
             // B_ReloadLayer
             // 
-            this.B_ReloadLayer.Location = new System.Drawing.Point(13, 118);
+            this.B_ReloadLayer.Location = new System.Drawing.Point(9, 156);
             this.B_ReloadLayer.Name = "B_ReloadLayer";
             this.B_ReloadLayer.Size = new System.Drawing.Size(22, 23);
             this.B_ReloadLayer.TabIndex = 10;
@@ -408,13 +408,9 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(311, 426);
             this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
             this.dataGridView1.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellEndEdit);
-            this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
             this.dataGridView1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseDown);
-            this.dataGridView1.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseUp);
             this.dataGridView1.CurrentCellChanged += new System.EventHandler(this.dataGridView1_CurrentCellChanged);
-            this.dataGridView1.Click += new System.EventHandler(this.dataGridView1_Click);
             // 
             // Line_ID
             // 
