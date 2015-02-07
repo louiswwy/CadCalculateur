@@ -140,14 +140,56 @@ namespace Calculers
         //
         List<LineList> listOfLine =new List<LineList>();
 
+
+
+        //方法二
         //点一,点二,层数; 点一<->点二的值为距离, 点一<->层 和 点二<->层 值为null
         int[][][] MatrixOfVertex = null;
-        Point2d EntrePoint;
-        Point2d MontreDecendPort;
 
-        Point2d EntPortTV;        
-        Point2d EntPortTD;
-        Point2d EntPortTP;
+        public class PointInEtage
+        {
+            private Point2d _point2d;
+            //private ObjectId _id;
+            private int _etage;
+
+            public Point2d Point2dCor
+            {
+                get { return this._point2d; }
+                set { this._point2d = value; }
+            } 
+
+            /*public ObjectId IdObj
+            {
+                get { return this._id; }
+                set { this._id = value; }
+            }*/
+
+            public int NumEtage
+            {
+                get { return this._etage; }
+                set { this._etage = value; }
+            }
+
+            public PointInEtage()
+            {
+
+            }
+
+            public PointInEtage(Point2d _pointCorr/*,ObjectId _IdLine*/,int _numEtage)
+            {
+                this._etage = _numEtage;
+                //this._id = _IdLine;
+                this._point2d = _pointCorr;
+            }
+
+        }
+
+        PointInEtage EntrePoint;
+        List<PointInEtage> MontreDecendPort = new List<PointInEtage>();
+
+        List<PointInEtage> EntPortTV = new List<PointInEtage>();
+        List<PointInEtage> EntPortTD = new List<PointInEtage>();
+        List<PointInEtage> EntPortTP = new List<PointInEtage>();
 
         //未记录的端口
         List<Point2d> UnVisitedPort;
@@ -666,7 +708,7 @@ namespace Calculers
                 Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 100, DrawRecPoint.Y + 400);
                 Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 100, DrawRecPoint.Y);
                 DrawRectangle(RecStartPoint, RecEndPoint, "Etage", "Etage" + Num_Etage.Value.ToString());
-                EntrePoint = new Point2d(DrawRecPoint.X, DrawRecPoint.Y);
+                EntrePoint = new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y),Convert.ToInt32(Num_Etage.Value));
                 this.Show();
             }
             else
@@ -687,7 +729,9 @@ namespace Calculers
                 //获取长方形左上,右下的点的2d坐标
                 Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 75, DrawRecPoint.Y + 300);
                 Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 75, DrawRecPoint.Y);
-                DrawRectangle(RecStartPoint, RecEndPoint);
+                DrawRectangle(RecStartPoint, RecEndPoint, "Etage", "Etage" + Num_Etage.Value.ToString());
+                PointInEtage _tmpPoint= new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y), Convert.ToInt32(Num_Etage.Value));
+                MontreDecendPort.Add(_tmpPoint);
                 this.Show();
             }
             else
@@ -713,6 +757,8 @@ namespace Calculers
                         if (GetPoint("\n输入起点:", out startPoint) && GetPoint("\n输入终点:", startPoint, out endPoint))
                         {
                             Line lin = new Line(startPoint, endPoint);
+                            PointInEtage _tmpStartPoint = new PointInEtage(new Point2d(startPoint.X,startPoint.Y), Convert.ToInt32(Num_Etage.Value));
+                            PointInEtage _tmpEndPoint = new PointInEtage(new Point2d(endPoint.X, endPoint.Y), Convert.ToInt32(Num_Etage.Value));
                             db.AddToModelSpace(lin);
                             acTrans.Commit();
                             // 绘制管道
