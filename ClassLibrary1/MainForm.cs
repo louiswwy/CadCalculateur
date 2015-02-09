@@ -26,8 +26,8 @@ namespace Calculers
         Document doc = AcadApp.DocumentManager.MdiActiveDocument;
         Database db = HostApplicationServices.WorkingDatabase;
         Editor ed = AcadApp.DocumentManager.MdiActiveDocument.Editor;
-            
-        //static List<string> layers;
+
+        //图层列表
         public List<string> layers
         {
             get;
@@ -72,20 +72,20 @@ namespace Calculers
                 get { return this._lineType; }
                 set { this._lineType = value; }
             }
-                               
+
             public Point3d StartPoint
             {
                 get { return this._startPoint; }
                 set { this._startPoint = value; }
             }
 
-                        
+
             public Point3d EndPoint
             {
                 get { return this._endPoint; }
                 set { this._endPoint = value; }
             }
-            
+
             public Double LengthLine
             {
                 get { return this._lengLine; }
@@ -130,66 +130,106 @@ namespace Calculers
                 this._startPoint = startPoint;
                 this._endPoint = endPoint;
                 this._lengLine = lengLine;
-                this._numTube=numtube;
+                this._numTube = numtube;
                 this._numTV = numTv;
                 this._numTD = numTd;
                 this._numTP = numTp;
             }
         }
 
-        //
-        List<LineList> listOfLine =new List<LineList>();
+        //实例化'线表'类
+        List<LineList> listOfLine = new List<LineList>();
 
 
 
         //方法二
         //点一,点二,层数; 点一<->点二的值为距离, 点一<->层 和 点二<->层 值为null
-        int[][][] MatrixOfVertex = null;
+        int[, ,] MatrixOfVertex = null;
 
+        //自定义'图中点'
         public class PointInEtage
         {
-            private Point2d _point2d;
             //private ObjectId _id;
-            private int _etage;
-
-            public Point2d Point2dCor
+            private Point2d _startPoint2d;
+            public Point2d StartPoint2dCor
             {
-                get { return this._point2d; }
-                set { this._point2d = value; }
-            } 
+                get { return this._startPoint2d; }
+                set { this._startPoint2d = value; }
+            }
 
+            private Point2d _endPoint2d;
+            public Point2d EndPoint2dCor
+            {
+                get { return this._endPoint2d; }
+                set { this._endPoint2d = value; }
+            }
             /*public ObjectId IdObj
             {
                 get { return this._id; }
                 set { this._id = value; }
             }*/
 
+            private int _etage;
             public int NumEtage
             {
                 get { return this._etage; }
                 set { this._etage = value; }
             }
 
+            private double _length;
+            public double LengthL
+            {
+                get { return this._length; }
+                set { this._length = value; }
+            }
+
+            private string _typePoint;
+            public string TypeOfPoint
+            {
+                get { return this._typePoint; }
+                set { this._typePoint = value; }
+            }
             public PointInEtage()
             {
 
             }
 
-            public PointInEtage(Point2d _pointCorr/*,ObjectId _IdLine*/,int _numEtage)
+            public PointInEtage(Point2d _startPointCorr/*,ObjectId _IdLine*/, int _numEtage, string TypePoint)
             {
-                this._etage = _numEtage;
+                this.StartPoint2dCor = _startPointCorr;
                 //this._id = _IdLine;
-                this._point2d = _pointCorr;
+                this.NumEtage = _numEtage;
+                this.TypeOfPoint = TypePoint;
+            }
+
+            /*public PointInEtage(Point2d _endPointCorr, int _numEtage)
+            {
+                this.EndPoint2dCor = _endPointCorr;
+                this.NumEtage = _etage;
+            }*/
+            public PointInEtage(Point2d _startPointCorr, Point2d _endPointCorr, int _numEtage, double _length, string TypePoint)
+            {
+                this.StartPoint2dCor = _startPointCorr;
+                this.EndPoint2dCor = _endPointCorr;
+                this.NumEtage = _etage;
+                this.LengthL = _length;
+                this.TypeOfPoint = TypePoint;
             }
 
         }
 
+        //List<PointInEtage> ListPoints = new List<PointInEtage>();
+
         PointInEtage EntrePoint;
         List<PointInEtage> MontreDecendPort = new List<PointInEtage>();
+
+        List<PointInEtage> LineInEtage = new List<PointInEtage>();
 
         List<PointInEtage> EntPortTV = new List<PointInEtage>();
         List<PointInEtage> EntPortTD = new List<PointInEtage>();
         List<PointInEtage> EntPortTP = new List<PointInEtage>();
+
+        List<Point2d> ListPoints = new List<Point2d>();
 
         //未记录的端口
         List<Point2d> UnVisitedPort;
@@ -217,14 +257,14 @@ namespace Calculers
             CalculerLine._IsShow = false;
         }
 
-        
+
         private void LayerC_SelectionChangeCommitted(object sender, EventArgs e)
         {
 
 
         }
 
-        
+
         #region 第一种方法,手动制定每两个节点间线缆/钢管数量
         /// <summary>
         /// 使用了:
@@ -351,7 +391,7 @@ namespace Calculers
             {
                 dataGridView1.Rows.RemoveAt(0);
             }
-           
+
         }
         #endregion
 
@@ -422,14 +462,14 @@ namespace Calculers
 
 
         string strCollected = string.Empty;
-        
+
 
         //计算线总长度
 
         #region 画图 (弃用)
         private void ButtonM_Click(object sender, EventArgs e)
         {
-            
+
             //Form1_Paint(this, new PaintEventArgs(CreateGraphics(), ClientRectangle));
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -444,7 +484,7 @@ namespace Calculers
         }
         #endregion
 
-        
+
         public bool GetPoint(string prompt, out Point3d pt)
         {
             Editor ed = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.Editor;
@@ -490,7 +530,7 @@ namespace Calculers
             }
         }
 
-        
+
         private Vector3d GetNormalByInVector(Vector3d inVector)
         {
             double tol = 1.0E-7;
@@ -529,7 +569,7 @@ namespace Calculers
         }
 
         private void Button_In_Click(object sender, EventArgs e)
-        { 
+        {
             DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
             // Start a transaction
             using (Transaction acTrans = db.TransactionManager.StartTransaction())
@@ -538,7 +578,7 @@ namespace Calculers
                 if (GetPoint("\n输入起点:", out startPoint))
                 {
 
-                    ed.WriteMessage("未完成");                
+                    ed.WriteMessage("未完成");
                 }
 
             }
@@ -692,7 +732,7 @@ namespace Calculers
         #endregion
 
         #region 方法二,画线后自动计数;
-        
+
         private void BA_RuKou_Click(object sender, EventArgs e)
         {
             //正则表达式1-99;
@@ -708,14 +748,20 @@ namespace Calculers
                 Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 100, DrawRecPoint.Y + 400);
                 Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 100, DrawRecPoint.Y);
                 DrawRectangle(RecStartPoint, RecEndPoint, "Etage", "Etage" + Num_Etage.Value.ToString());
-                EntrePoint = new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y),Convert.ToInt32(Num_Etage.Value));
+                EntrePoint = new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y), Convert.ToInt32(Num_Etage.Value), "RuKou");
+                ListPoints.Add(new Point2d(DrawRecPoint.X, DrawRecPoint.Y));
                 this.Show();
+
+                BA_RuKou.Enabled = false;
+                BA_ChuanLou.Enabled = true;
+                BA_Port.Enabled = true;
+                BA_DrawLine.Enabled = true;
             }
             else
             {
                 AcadApp.ShowAlertDialog("需要说明楼层或格式错误.");
             }
-            
+
         }
 
         private void BA_ChuanLou_Click(object sender, EventArgs e)
@@ -727,11 +773,12 @@ namespace Calculers
                 GetPoint("\n输入起点:", out DrawRecPoint);
 
                 //获取长方形左上,右下的点的2d坐标
-                Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 75, DrawRecPoint.Y + 300);
-                Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 75, DrawRecPoint.Y);
+                Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 75, DrawRecPoint.Y + 150);
+                Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 75, DrawRecPoint.Y - 150);
                 DrawRectangle(RecStartPoint, RecEndPoint, "Etage", "Etage" + Num_Etage.Value.ToString());
-                PointInEtage _tmpPoint= new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y), Convert.ToInt32(Num_Etage.Value));
+                PointInEtage _tmpPoint = new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y), Convert.ToInt32(Num_Etage.Value), "ChuanLou");
                 MontreDecendPort.Add(_tmpPoint);
+                ListPoints.Add(new Point2d(DrawRecPoint.X, DrawRecPoint.Y));
                 this.Show();
             }
             else
@@ -740,7 +787,7 @@ namespace Calculers
             }
         }
 
-        private void B_DrawLine_Click(object sender, EventArgs e)
+        private void BA_DrawLine_Click(object sender, EventArgs e)
         {
 
             if (isNumberic1(T_etage.Text.ToString(), @"^[1-9]\d{0,1}$"))
@@ -749,31 +796,32 @@ namespace Calculers
                 // Start a transaction
                 using (Transaction acTrans = db.TransactionManager.StartTransaction())
                 {
-
+                    this.Hide();
                     try
                     {
-                        Point3d startPoint = new Point3d();
-                        Point3d endPoint = new Point3d();
-                        if (GetPoint("\n输入起点:", out startPoint) && GetPoint("\n输入终点:", startPoint, out endPoint))
+                        Point3d _startPoint = new Point3d();
+                        Point3d _endPoint = new Point3d();
+                        if (GetPoint("\n输入起点:", out _startPoint) && GetPoint("\n输入终点:", _startPoint, out _endPoint))
                         {
-                            Line lin = new Line(startPoint, endPoint);
-                            PointInEtage _tmpStartPoint = new PointInEtage(new Point2d(startPoint.X,startPoint.Y), Convert.ToInt32(Num_Etage.Value));
-                            PointInEtage _tmpEndPoint = new PointInEtage(new Point2d(endPoint.X, endPoint.Y), Convert.ToInt32(Num_Etage.Value));
+                            ed.WriteMessage(">" + _startPoint + "---" + _endPoint + "<\n");
+                            Line lin = new Line(_startPoint, _endPoint);
+                            PointInEtage _tmpStartPoint = new PointInEtage(new Point2d(_startPoint.X, _startPoint.Y), new Point2d(_endPoint.X, _endPoint.Y), Convert.ToInt32(Num_Etage.Value), lin.Length, "Line");
                             db.AddToModelSpace(lin);
                             acTrans.Commit();
-                            // 绘制管道
-                            //DrawPipe(startPoint, endPoint, 100, 70);
+                            LineInEtage.Add(_tmpStartPoint);
+                            ListPoints.Add(new Point2d(_startPoint.X, _startPoint.Y));
+                            ListPoints.Add(new Point2d(_endPoint.X, _endPoint.Y));
+
                         }
-                        // Request for objects to be selected in the drawing area
-                        //PromptSelectionResult acSSPrompt = doc.Editor.GetCommandVersion;
                     }
                     catch (Autodesk.AutoCAD.Runtime.Exception ex)
                     {
                         AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
                         ed.WriteMessage("出错了!,错误信息: >" + ex.Message + "<\n");
                     }
+                    this.Show();
                 }
-                m_DocumentLock.Dispose(); 
+                m_DocumentLock.Dispose();
             }
             else
             {
@@ -783,7 +831,7 @@ namespace Calculers
 
 
         //画长方形
-        public void DrawRectangle(Point2d StartPt,Point2d EndPoint)
+        public void DrawRectangle(Point2d StartPt, Point2d EndPoint)
         {
             DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
             //获取用户在文件上选定的点坐标
@@ -806,7 +854,7 @@ namespace Calculers
 
 
         //生成带扩展信息的长方形
-        public void DrawRectangle(Point2d StartPt, Point2d EndPoint,string regAppName,string XData)
+        public void DrawRectangle(Point2d StartPt, Point2d EndPoint, string regAppName, string XData)
         {
             DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
             //获取用户在文件上选定的点坐标
@@ -839,7 +887,7 @@ namespace Calculers
                 typeValue.Add(DxfCode.ExtendedDataAsciiString, XData);
                 rectangle.XData = (typeValue);
                 //
-                
+
                 db.AddToModelSpace(rectangle);
 
                 trans.Commit();
@@ -986,7 +1034,7 @@ namespace Calculers
             return null;
         }
 
-        //public void load
+
         public bool isNumberic1(string _string)
         {
             //是否为正整数.
@@ -1039,14 +1087,188 @@ namespace Calculers
             {
                 Num_Etage.Visible = true;
                 Num_Etage.Enabled = true;
-                Num_Etage.Maximum = Convert.ToInt32(T_etage.Text.ToString());                
+                Num_Etage.Maximum = Convert.ToInt32(T_etage.Text.ToString());
             }
         }
 
         private void Num_Etage_ValueChanged(object sender, EventArgs e)
         {
-            string a=Num_Etage.Value.ToString();
+            string a = Num_Etage.Value.ToString();
             MessageBox.Show(a);
         }
+
+        private void BA_Port_Click(object sender, EventArgs e)
+        {
+            //终端的位置,需要画在线上.
+            if (isNumberic1(T_etage.Text.ToString(), @"^[1-9]\d{0,1}$"))
+            {
+                this.Hide();
+                Point3d DrawPoint;
+                GetPoint("\n输入起点:", out DrawPoint);
+                PointInEtage _tmpPoint = new PointInEtage(new Point2d(DrawPoint.X, DrawPoint.Y), Convert.ToInt32(Num_Etage.Value), "ZhongDian");
+
+                try
+                {
+                    DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
+
+                    using (Transaction trans = db.TransactionManager.StartTransaction())
+                    {
+                        BlockTable bct;
+                        bct = trans.GetObject(db.BlockTableId, OpenMode.ForRead) as BlockTable;
+                        //open the block table record model space for write
+                        BlockTableRecord bctr;
+                        bctr = trans.GetObject(bct[BlockTableRecord.ModelSpace], OpenMode.ForWrite) as BlockTableRecord;
+                        //create a point
+                        DBPoint acPoint = new DBPoint(DrawPoint);
+                        acPoint.SetDatabaseDefaults();
+
+                        // Add the new object to the block table record and the transaction
+                        bctr.AppendEntity(acPoint);
+                        trans.AddNewlyCreatedDBObject(acPoint, true);
+
+                        // Set the style for all point objects in the drawing
+
+                        db.Pdmode = 34;
+                        db.Pdsize = 50;
+
+                        // Save the new object to the database
+                        trans.Commit();
+                        m_DocumentLock.Dispose();
+                    }
+                }
+                catch (Autodesk.AutoCAD.Runtime.Exception ex)
+                {
+                    AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
+                    ed.WriteMessage("出错了!,错误信息: >" + ex.Message + "<\n");
+                }
+                this.Show();
+            }
+        }
+
+
+        private void Button_Valide_M2_Click(object sender, EventArgs e)
+        {
+            if (EntrePoint != null && isNumberic1(T_etage.Text.ToString(), @"^[1-9]\d{0,1}$"))
+            {
+                MatrixOfVertex = createMatriceAdjacence();
+
+                treeView2.Nodes.Clear();
+                FillTreeView();
+            }
+            else
+            {
+                AcadApp.ShowAlertDialog("图案中没有入口");
+            }
+        }
+
+        //在treeview2中显示线段及端点
+        private void FillTreeView()
+        {
+            TreeNode MainNode1 = new TreeNode();
+            MainNode1.Text = "入口"; //图层名称
+            treeView2.Nodes.Add(MainNode1);
+
+            TreeNode MainNode2 = new TreeNode();
+            MainNode2.Text = "穿楼"; //图层名称
+            treeView2.Nodes.Add(MainNode2);
+
+            TreeNode MainNode3 = new TreeNode();
+            MainNode3.Text = "终端"; //图层名称
+            treeView2.Nodes.Add(MainNode3);
+
+            //树图中line类型线段
+            TreeNode NodeLine1 = new TreeNode();
+            NodeLine1.Text = EntrePoint.StartPoint2dCor.ToString();
+            MainNode1.Nodes.Add(NodeLine1);
+
+            foreach (var _mondec in MontreDecendPort)
+            {
+                TreeNode NodeLine2 = new TreeNode();
+                NodeLine2.Text = _mondec.StartPoint2dCor.ToString();
+                MainNode2.Nodes.Add(NodeLine2);
+            }
+
+            foreach (var _line in LineInEtage)
+            {
+                TreeNode NodeLine3 = new TreeNode();
+                NodeLine3.Text = "Line";//_line.StartPoint2dCor.ToString();
+                MainNode3.Nodes.Add(NodeLine3);
+
+                TreeNode NodeLine4 = new TreeNode();
+                NodeLine4.Text = _line.StartPoint2dCor.ToString();
+                NodeLine3.Nodes.Add(NodeLine4);
+
+                TreeNode NodeLine5 = new TreeNode();
+                NodeLine5.Text = _line.EndPoint2dCor.ToString();
+                NodeLine3.Nodes.Add(NodeLine5);
+            }
+
+        }
+
+        private int CalculeNumberOfPoint()
+        {
+            int totPoint = 0;
+
+            //每个图中有且只有一个入口
+            totPoint = 1;
+            //终端的数量
+            totPoint = totPoint + MontreDecendPort.Count();
+            //线段的数量+1 等于点的数量
+            totPoint = totPoint + LineInEtage.Count() + 1;
+            //穿墙洞的数量
+            //totPoint=totPoint+chua
+            return totPoint;
+        }
+        private int[, ,] createMatriceAdjacence()
+        {
+
+            return null;
+        }
+
+        #region 对使用宽度优先算法生成邻接矩阵的一种尝试
+        //点的深度(宽度优先算法)
+        public class DepthPoint
+        {
+            private Point2d _pointCor;
+            public Point2d PointCoor
+            {
+                get { return this._pointCor; }
+                set { this._pointCor = value; }
+            }
+            private int _depth;
+            public int Depth
+            {
+                get { return this._depth; }
+                set { this._depth = value; }
+            }
+
+            public DepthPoint()
+            {
+
+            }
+
+            public DepthPoint(Point2d PointCor, int DepthPoint)
+            {
+                this.Depth = DepthPoint;
+                this.PointCoor = PointCor;
+            }
+
+        }
+        private int[] depthOfPoint()
+        {
+
+            foreach (var ListPoint in ListPoints)
+            {
+                //if (EntrePoint.NumEtage == ListPoint.NumEtage)
+//{
+
+                //}
+                
+            }
+            return null;
+        }
+
+        #endregion
     }
+
 }

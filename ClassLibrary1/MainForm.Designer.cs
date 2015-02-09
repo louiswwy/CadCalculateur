@@ -42,8 +42,10 @@
             this.B_ReloadLayer = new System.Windows.Forms.Button();
             this.checkedListBox_Layer = new System.Windows.Forms.CheckedListBox();
             this.groupBox_1 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.Num_Etage = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
-            this.B_DrawLine = new System.Windows.Forms.Button();
+            this.BA_DrawLine = new System.Windows.Forms.Button();
             this.BA_Port = new System.Windows.Forms.Button();
             this.T_etage = new System.Windows.Forms.TextBox();
             this.CheckBox_TD = new System.Windows.Forms.CheckBox();
@@ -69,8 +71,8 @@
             this.NumLine_TD = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NumLine_Tv = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NumLine_TP = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Num_Etage = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
+            this.Button_Valide_M2 = new System.Windows.Forms.Button();
+            this.treeView2 = new System.Windows.Forms.TreeView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -79,12 +81,12 @@
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox_1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Num_Etage)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Num_Etage)).BeginInit();
             this.SuspendLayout();
             // 
             // Combobox_Layer
@@ -182,6 +184,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.treeView2);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.groupBox_1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -226,10 +229,11 @@
             // 
             // groupBox_1
             // 
+            this.groupBox_1.Controls.Add(this.Button_Valide_M2);
             this.groupBox_1.Controls.Add(this.label6);
             this.groupBox_1.Controls.Add(this.Num_Etage);
             this.groupBox_1.Controls.Add(this.label5);
-            this.groupBox_1.Controls.Add(this.B_DrawLine);
+            this.groupBox_1.Controls.Add(this.BA_DrawLine);
             this.groupBox_1.Controls.Add(this.BA_Port);
             this.groupBox_1.Controls.Add(this.T_etage);
             this.groupBox_1.Controls.Add(this.CheckBox_TD);
@@ -242,10 +246,27 @@
             this.groupBox_1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.groupBox_1.Location = new System.Drawing.Point(6, 6);
             this.groupBox_1.Name = "groupBox_1";
-            this.groupBox_1.Size = new System.Drawing.Size(335, 191);
+            this.groupBox_1.Size = new System.Drawing.Size(379, 191);
             this.groupBox_1.TabIndex = 14;
             this.groupBox_1.TabStop = false;
             this.groupBox_1.Text = "画图";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(202, 22);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(67, 13);
+            this.label6.TabIndex = 23;
+            this.label6.Text = "现在的楼层";
+            // 
+            // Num_Etage
+            // 
+            this.Num_Etage.Location = new System.Drawing.Point(135, 20);
+            this.Num_Etage.Name = "Num_Etage";
+            this.Num_Etage.Size = new System.Drawing.Size(61, 20);
+            this.Num_Etage.TabIndex = 22;
+            this.Num_Etage.ValueChanged += new System.EventHandler(this.Num_Etage_ValueChanged);
             // 
             // label5
             // 
@@ -256,15 +277,16 @@
             this.label5.TabIndex = 21;
             this.label5.Text = "楼层";
             // 
-            // B_DrawLine
+            // BA_DrawLine
             // 
-            this.B_DrawLine.Location = new System.Drawing.Point(9, 101);
-            this.B_DrawLine.Name = "B_DrawLine";
-            this.B_DrawLine.Size = new System.Drawing.Size(61, 32);
-            this.B_DrawLine.TabIndex = 11;
-            this.B_DrawLine.Text = "画线(?)";
-            this.B_DrawLine.UseVisualStyleBackColor = true;
-            this.B_DrawLine.Click += new System.EventHandler(this.B_DrawLine_Click);
+            this.BA_DrawLine.Enabled = false;
+            this.BA_DrawLine.Location = new System.Drawing.Point(9, 101);
+            this.BA_DrawLine.Name = "BA_DrawLine";
+            this.BA_DrawLine.Size = new System.Drawing.Size(61, 32);
+            this.BA_DrawLine.TabIndex = 11;
+            this.BA_DrawLine.Text = "画线(?)";
+            this.BA_DrawLine.UseVisualStyleBackColor = true;
+            this.BA_DrawLine.Click += new System.EventHandler(this.BA_DrawLine_Click);
             // 
             // BA_Port
             // 
@@ -272,7 +294,9 @@
             this.BA_Port.Name = "BA_Port";
             this.BA_Port.Size = new System.Drawing.Size(61, 30);
             this.BA_Port.TabIndex = 19;
+            this.BA_Port.Text = "端口";
             this.BA_Port.UseVisualStyleBackColor = true;
+            this.BA_Port.Click += new System.EventHandler(this.BA_Port_Click);
             // 
             // T_etage
             // 
@@ -306,10 +330,12 @@
             // 
             // BA_ChuanLou
             // 
+            this.BA_ChuanLou.Enabled = false;
             this.BA_ChuanLou.Location = new System.Drawing.Point(135, 52);
             this.BA_ChuanLou.Name = "BA_ChuanLou";
             this.BA_ChuanLou.Size = new System.Drawing.Size(61, 30);
             this.BA_ChuanLou.TabIndex = 6;
+            this.BA_ChuanLou.Text = "穿墙洞";
             this.BA_ChuanLou.UseVisualStyleBackColor = true;
             this.BA_ChuanLou.Click += new System.EventHandler(this.BA_ChuanLou_Click);
             // 
@@ -339,6 +365,7 @@
             this.BA_RuKou.Name = "BA_RuKou";
             this.BA_RuKou.Size = new System.Drawing.Size(61, 32);
             this.BA_RuKou.TabIndex = 5;
+            this.BA_RuKou.Text = "入口";
             this.BA_RuKou.UseVisualStyleBackColor = true;
             this.BA_RuKou.Click += new System.EventHandler(this.BA_RuKou_Click);
             // 
@@ -496,22 +523,23 @@
             this.NumLine_TP.HeaderText = "Num_TP";
             this.NumLine_TP.Name = "NumLine_TP";
             // 
-            // Num_Etage
+            // Button_Valide_M2
             // 
-            this.Num_Etage.Location = new System.Drawing.Point(135, 20);
-            this.Num_Etage.Name = "Num_Etage";
-            this.Num_Etage.Size = new System.Drawing.Size(61, 20);
-            this.Num_Etage.TabIndex = 22;
-            this.Num_Etage.ValueChanged += new System.EventHandler(this.Num_Etage_ValueChanged);
+            this.Button_Valide_M2.Location = new System.Drawing.Point(9, 147);
+            this.Button_Valide_M2.Name = "Button_Valide_M2";
+            this.Button_Valide_M2.Size = new System.Drawing.Size(61, 30);
+            this.Button_Valide_M2.TabIndex = 24;
+            this.Button_Valide_M2.Text = "确认";
+            this.Button_Valide_M2.UseVisualStyleBackColor = true;
+            this.Button_Valide_M2.Click += new System.EventHandler(this.Button_Valide_M2_Click);
             // 
-            // label6
+            // treeView2
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(202, 22);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(67, 13);
-            this.label6.TabIndex = 23;
-            this.label6.Text = "现在的楼层";
+            this.treeView2.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.treeView2.Location = new System.Drawing.Point(164, 203);
+            this.treeView2.Name = "treeView2";
+            this.treeView2.Size = new System.Drawing.Size(191, 150);
+            this.treeView2.TabIndex = 16;
             // 
             // MainForm
             // 
@@ -534,13 +562,13 @@
             this.groupBox1.PerformLayout();
             this.groupBox_1.ResumeLayout(false);
             this.groupBox_1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Num_Etage)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Num_Etage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -559,7 +587,7 @@
         private System.Windows.Forms.CheckedListBox checkedListBox_Layer;
         private System.Windows.Forms.Button buttonSelec;
         private System.Windows.Forms.Button B_ReloadLayer;
-        private System.Windows.Forms.Button B_DrawLine;
+        private System.Windows.Forms.Button BA_DrawLine;
         private System.Windows.Forms.Button Button_End;
         private System.Windows.Forms.Button Button_In;
         private System.Windows.Forms.DataGridView dataGridView1;
@@ -591,5 +619,7 @@
         private System.Windows.Forms.TextBox T_etage;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown Num_Etage;
+        private System.Windows.Forms.Button Button_Valide_M2;
+        private System.Windows.Forms.TreeView treeView2;
     }
 }
