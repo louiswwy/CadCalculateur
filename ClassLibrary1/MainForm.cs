@@ -144,7 +144,7 @@ namespace Calculers
 
         //方法二
         //点一,点二,层数; 点一<->点二的值为距离, 点一<->层 和 点二<->层 值为null
-        int[, ,] MatrixOfVertex = null;
+        int[][][] MatrixOfVertex = null;
 
         //自定义'图中点'
         public class PointInEtage
@@ -749,7 +749,16 @@ namespace Calculers
                 Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 100, DrawRecPoint.Y);
                 DrawRectangle(RecStartPoint, RecEndPoint, "Etage", "Etage" + Num_Etage.Value.ToString());
                 EntrePoint = new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y), Convert.ToInt32(Num_Etage.Value), "RuKou");
-                ListPoints.Add(new Point2d(DrawRecPoint.X, DrawRecPoint.Y));
+
+                
+                if (! isPointInDataSet(ListPoints,new Point2d(DrawRecPoint.X, DrawRecPoint.Y)))
+                {
+                    ListPoints.Add(new Point2d(DrawRecPoint.X, DrawRecPoint.Y)); 
+                }
+                else
+                {
+                    //AcadApp.ShowAlertDialog("该点已存在.");
+                }
                 this.Show();
 
                 BA_RuKou.Enabled = false;
@@ -777,8 +786,17 @@ namespace Calculers
                 Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 75, DrawRecPoint.Y - 150);
                 DrawRectangle(RecStartPoint, RecEndPoint, "Etage", "Etage" + Num_Etage.Value.ToString());
                 PointInEtage _tmpPoint = new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y), Convert.ToInt32(Num_Etage.Value), "ChuanLou");
-                MontreDecendPort.Add(_tmpPoint);
-                ListPoints.Add(new Point2d(DrawRecPoint.X, DrawRecPoint.Y));
+                MontreDecendPort.Add(_tmpPoint);      
+                
+                if (! isPointInDataSet(ListPoints,new Point2d(DrawRecPoint.X, DrawRecPoint.Y)))
+                {
+                    ListPoints.Add(new Point2d(DrawRecPoint.X, DrawRecPoint.Y)); 
+                }
+                else
+                {
+                    //AcadApp.ShowAlertDialog("该点已存在.");
+                }
+                
                 this.Show();
             }
             else
@@ -792,11 +810,12 @@ namespace Calculers
 
             if (isNumberic1(T_etage.Text.ToString(), @"^[1-9]\d{0,1}$"))
             {
+                this.Hide();
                 DocumentLock m_DocumentLock = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument.LockDocument();
                 // Start a transaction
                 using (Transaction acTrans = db.TransactionManager.StartTransaction())
                 {
-                    this.Hide();
+                    
                     try
                     {
                         Point3d _startPoint = new Point3d();
@@ -805,13 +824,28 @@ namespace Calculers
                         {
                             ed.WriteMessage(">" + _startPoint + "---" + _endPoint + "<\n");
                             Line lin = new Line(_startPoint, _endPoint);
-                            PointInEtage _tmpStartPoint = new PointInEtage(new Point2d(_startPoint.X, _startPoint.Y), new Point2d(_endPoint.X, _endPoint.Y), Convert.ToInt32(Num_Etage.Value), lin.Length, "Line");
+                            PointInEtage _tmpLine = new PointInEtage(new Point2d(_startPoint.X, _startPoint.Y), new Point2d(_endPoint.X, _endPoint.Y), Convert.ToInt32(Num_Etage.Value), lin.Length, "Line");
                             db.AddToModelSpace(lin);
                             acTrans.Commit();
-                            LineInEtage.Add(_tmpStartPoint);
-                            ListPoints.Add(new Point2d(_startPoint.X, _startPoint.Y));
-                            ListPoints.Add(new Point2d(_endPoint.X, _endPoint.Y));
+                            LineInEtage.Add(_tmpLine);
 
+                            if (!isPointInDataSet(ListPoints, new Point2d(_startPoint.X, _startPoint.Y)))
+                            {
+                                ListPoints.Add(new Point2d(_startPoint.X, _startPoint.Y));
+                            }
+                            else
+                            {
+                                //AcadApp.ShowAlertDialog("该点已存在.");
+                            }
+                            if (!isPointInDataSet(ListPoints, new Point2d(_endPoint.X, _endPoint.Y)))
+                            {
+                                ListPoints.Add(new Point2d(_endPoint.X, _endPoint.Y));
+                            }
+                            else
+                            {
+                                //AcadApp.ShowAlertDialog("该点已存在.");
+                            }
+                                   
                         }
                     }
                     catch (Autodesk.AutoCAD.Runtime.Exception ex)
@@ -819,9 +853,10 @@ namespace Calculers
                         AcadApp.ShowAlertDialog("出错了!,错误信息:" + ex.Message);
                         ed.WriteMessage("出错了!,错误信息: >" + ex.Message + "<\n");
                     }
-                    this.Show();
+                    
                 }
                 m_DocumentLock.Dispose();
+                this.Show();
             }
             else
             {
@@ -1034,6 +1069,17 @@ namespace Calculers
             return null;
         }
 
+        public bool isPointInDataSet(List<Point2d> list,Point2d point)
+        {
+            if (list.Contains(point))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public bool isNumberic1(string _string)
         {
@@ -1094,7 +1140,7 @@ namespace Calculers
         private void Num_Etage_ValueChanged(object sender, EventArgs e)
         {
             string a = Num_Etage.Value.ToString();
-            MessageBox.Show(a);
+            //MessageBox.Show(a);
         }
 
         private void BA_Port_Click(object sender, EventArgs e)
@@ -1145,14 +1191,38 @@ namespace Calculers
             }
         }
 
-
+        //MatrixOfVertex为3维矩阵,1维为x,2维为y,3维为楼层
+        //MatrixOfVertex[1,2,1]
         private void Button_Valide_M2_Click(object sender, EventArgs e)
         {
             if (EntrePoint != null && isNumberic1(T_etage.Text.ToString(), @"^[1-9]\d{0,1}$"))
             {
-                MatrixOfVertex = createMatriceAdjacence();
+                int numOfVertex=ListPoints.Count;
+                //MatrixOfVertex = new int[numOfVertex, numOfVertex, Convert.ToInt32(T_etage.Text)];
 
-                treeView2.Nodes.Clear();
+                for (int flo = 0; flo < Convert.ToInt32(T_etage.Text); flo++)
+                {
+                    for (int y = 0; y < numOfVertex; y++)
+                    {
+                        for (int x = 0; x < numOfVertex; x++)
+                        {
+                            //多交线上的点取负值.
+                            if(x==y)
+                            {
+                               // MatrixOfVertex[x, y, flo] = -1;
+                            }
+                            else
+                            {
+                                //LineInEtage.IndexOf()
+                                //MatrixOfVertex[x, y, flo] = 0;
+                            }
+                            
+                            
+                        }
+                    } 
+                }
+                    //treeview2显示
+                    treeView2.Nodes.Clear();
                 FillTreeView();
             }
             else

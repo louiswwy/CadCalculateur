@@ -15,6 +15,8 @@ namespace Calculers
     public class CalculerLine
     {
         public static bool _IsShow = false;
+        //private MainForm form;
+        Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
         /*public List<Line> listEntitys
         {
             get;
@@ -26,16 +28,33 @@ namespace Calculers
         {         
             MainForm form = new MainForm();     //创建对话框
 
-            if (_IsShow==false)
+            if (form==null)
             {
+                form = new MainForm();
                 Application.ShowModelessDialog(form);  //显示非模态对话框 
-
             }
-            else
+            else if(form.Visible==false)
             {
-                Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
-                ed.WriteMessage("界面已打开,请勿重复打开..");
+                form.Visible = true;
             }
+            //else
+            //{
+            //    ed.WriteMessage("界面已打开,请勿重复打开..");
+            //}
+                //ed.WriteMessage("111");
+                //if (/*_IsShow == false || !*/form.IsDisposed)
+                /*{
+                    form = new MainForm();
+                    Application.ShowModelessDialog(form);  //显示非模态对话框 
+
+                }
+                else
+                {
+                    //form.WindowState=Fo
+                    //Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+                    ed.WriteMessage("界面已打开,请勿重复打开..");
+                } */
         }
     }
 }
+
