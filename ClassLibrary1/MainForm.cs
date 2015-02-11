@@ -144,7 +144,7 @@ namespace Calculers
 
         //方法二
         //点一,点二,层数; 点一<->点二的值为距离, 点一<->层 和 点二<->层 值为null
-        int[][][] MatrixOfVertex = null;
+        int[,,] MatrixOfVertex = null;
 
         //自定义'图中点'
         public class PointInEtage
@@ -207,6 +207,14 @@ namespace Calculers
                 this.EndPoint2dCor = _endPointCorr;
                 this.NumEtage = _etage;
             }*/
+
+            public PointInEtage(Point2d _startPointCorr, Point2d _endPointCorr, int _numEtage)
+            {
+                this.StartPoint2dCor = _startPointCorr;
+                this.EndPoint2dCor = _endPointCorr;
+                this.NumEtage = _etage;
+            }
+
             public PointInEtage(Point2d _startPointCorr, Point2d _endPointCorr, int _numEtage, double _length, string TypePoint)
             {
                 this.StartPoint2dCor = _startPointCorr;
@@ -229,7 +237,62 @@ namespace Calculers
         List<PointInEtage> EntPortTD = new List<PointInEtage>();
         List<PointInEtage> EntPortTP = new List<PointInEtage>();
 
-        List<Point2d> ListPoints = new List<Point2d>();
+        public class ListPoints
+        {
+            private Point2d _prevPoint;
+            public Point2d PrevPoint
+            {
+                get { return this._prevPoint; }
+                set { this._prevPoint = value; }
+            }
+            private Point2d _currPoint;
+            public Point2d CurrPoint
+            {
+                get { return this._currPoint; }
+                set { this._currPoint = value; }
+            }
+            /*private Point2d _nextPoint;
+            public Point2d NextPoint
+            {
+                get { return this._nextPoint; }
+                set { this._nextPoint = value; }
+            }*/
+
+            private string _type;
+            public string TypePoint
+            {
+                get { return this._type; }
+                set { this._type = value; }
+            }
+
+            //只有前点(终端)
+            public ListPoints(Point2d curr_Point)//, string type)
+            {
+                //this.PrevPoint = prev_Point;
+                this.CurrPoint = curr_Point;
+                //this.TypePoint = type;
+            }
+
+            /*//没有前点(起始点)
+            public ListPoints(Point2d curr_Point, Point2d next_Point, string type)
+            {
+                this.CurrPoint = curr_Point;
+                this.NextPoint = next_Point;
+                this.TypePoint = type;
+            }*/
+
+            //中间点
+            public ListPoints(Point2d prev_Point, Point2d curr_Point)//, string type)
+            {
+                this.PrevPoint = prev_Point;
+                this.CurrPoint = curr_Point;
+                //this.NextPoint = next_Point;
+                //this.TypePoint = type;
+            }
+
+        }
+
+        List<ListPoints> ListOfPoints = new List<ListPoints>();
 
         //未记录的端口
         List<Point2d> UnVisitedPort;
@@ -311,14 +374,18 @@ namespace Calculers
                                 Line acEnt = acTrans.GetObject(acSSObj.ObjectId,
                                                        OpenMode.ForRead) as Line;
                                 //AcadApp.ShowAlertDialog("3;");
-                                formule.Text = acEnt.Length.ToString();
-                                //listLines = acEnt;
-                                //AcadApp.ShowAlertDialog("length: " + acEnt.Length.ToString());
-
-                                LineList _SelectedLine = new LineList(acEnt.ObjectId.Handle.Value.ToString()
+                                if (acEnt != null)
+                                {
+                                    formule.Text = acEnt.Length.ToString();
+                                    //listLines = acEnt;
+                                    //AcadApp.ShowAlertDialog("length: " + acEnt.Length.ToString());
+                                    
+                                    LineList _SelectedLine = new LineList(acEnt.ObjectId.Handle.Value.ToString()
                                     , acEnt.GetType().ToString(), acEnt.StartPoint, acEnt.EndPoint, acEnt.Length);
+                                    
+                                    listOfLine.Add(_SelectedLine);
+                                }
 
-                                listOfLine.Add(_SelectedLine);
 
                                 i++;
                             }
@@ -751,14 +818,15 @@ namespace Calculers
                 DrawRectangle(RecStartPoint, RecEndPoint, "Etage", "Etage" + Num_Etage.Value.ToString());
                 EntrePoint = new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y), Convert.ToInt32(Num_Etage.Value), "RuKou");
 
-                
-                if (! isPointInDataSet(ListPoints,new Point2d(DrawRecPoint.X, DrawRecPoint.Y)))
+                //ListOfPoints
+                if (!isPointExist(ListOfPoints, new Point2d(DrawRecPoint.X, DrawRecPoint.Y)))
                 {
-                    ListPoints.Add(new Point2d(DrawRecPoint.X, DrawRecPoint.Y)); 
+                    ListPoints _temp = new ListPoints(new Point2d(DrawRecPoint.X, DrawRecPoint.Y));
+                    ListOfPoints.Add(_temp); 
                 }
                 else
                 {
-                    //AcadApp.ShowAlertDialog("该点已存在.");
+                    ed.WriteMessage("点已存在. \n");
                 }
                 this.Show();
 
@@ -778,6 +846,7 @@ namespace Calculers
         {
             if (isNumberic1(T_etage.Text.ToString(), @"^[1-9]\d{0,1}$"))
             {
+                PointInEtage _tmpPoint;
                 this.Hide();
                 Point3d DrawRecPoint;
                 GetPoint("\n输入起点:", out DrawRecPoint);
@@ -786,10 +855,20 @@ namespace Calculers
                 Point2d RecStartPoint = new Point2d(DrawRecPoint.X - 75, DrawRecPoint.Y + 150);
                 Point2d RecEndPoint = new Point2d(DrawRecPoint.X + 75, DrawRecPoint.Y - 150);
                 DrawRectangle(RecStartPoint, RecEndPoint, "Etage", "Etage" + Num_Etage.Value.ToString());
-                PointInEtage _tmpPoint = new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y), Convert.ToInt32(Num_Etage.Value), "ChuanLou");
-                MontreDecendPort.Add(_tmpPoint);      
+                if (Num_Etage.Value==1)
+                {
+                    _tmpPoint = new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y), Convert.ToInt32(Num_Etage.Value), "RuKou"); //RuKou  ChuanLou
+                    ed.WriteMessage("在一楼添加穿楼口.\n");
+                    MontreDecendPort.Add(_tmpPoint);      
+                }
+                else if (Num_Etage.Value > 1)
+                {
+                    _tmpPoint = new PointInEtage(new Point2d(DrawRecPoint.X, DrawRecPoint.Y), Convert.ToInt32(Num_Etage.Value), "ChuanLou"); //RuKou  ChuanLou
+                    ed.WriteMessage("在" + Num_Etage.Value + "楼添加穿楼口.\n"); 
+                    MontreDecendPort.Add(_tmpPoint);                
+                }    
                 
-                if (! isPointInDataSet(ListPoints,new Point2d(DrawRecPoint.X, DrawRecPoint.Y)))
+                if (! isPointExist(ListPoints,new Point2d(DrawRecPoint.X, DrawRecPoint.Y)))
                 {
                     ListPoints.Add(new Point2d(DrawRecPoint.X, DrawRecPoint.Y)); 
                 }
@@ -830,7 +909,7 @@ namespace Calculers
                             acTrans.Commit();
                             LineInEtage.Add(_tmpLine);
 
-                            if (!isPointInDataSet(ListPoints, new Point2d(_startPoint.X, _startPoint.Y)))
+                            if (!isPointExist(ListPoints, new Point2d(_startPoint.X, _startPoint.Y)))
                             {
                                 ListPoints.Add(new Point2d(_startPoint.X, _startPoint.Y));
                             }
@@ -838,7 +917,7 @@ namespace Calculers
                             {
                                 //AcadApp.ShowAlertDialog("该点已存在.");
                             }
-                            if (!isPointInDataSet(ListPoints, new Point2d(_endPoint.X, _endPoint.Y)))
+                            if (!isPointExist(ListPoints, new Point2d(_endPoint.X, _endPoint.Y)))
                             {
                                 ListPoints.Add(new Point2d(_endPoint.X, _endPoint.Y));
                             }
@@ -1070,16 +1149,22 @@ namespace Calculers
             return null;
         }
 
-        public bool isPointInDataSet(List<Point2d> list,Point2d point)
+        public bool isPointExist(List<ListPoints> lists, Point2d point)
         {
-            if (list.Contains(point))
+            bool _isexist = false;
+            foreach (var list in lists)
             {
-                return true;
+                if (list.CurrPoint == point)
+                {
+                    _isexist = true;
+                    break;
+                }
+                else
+                {
+                    _isexist = false;
+                }
             }
-            else
-            {
-                return false;
-            }
+            return _isexist;
         }
 
         public bool isNumberic1(string _string)
@@ -1196,10 +1281,11 @@ namespace Calculers
         //MatrixOfVertex[1,2,1]
         private void Button_Valide_M2_Click(object sender, EventArgs e)
         {
+            string a;
             if (EntrePoint != null && isNumberic1(T_etage.Text.ToString(), @"^[1-9]\d{0,1}$"))
             {
                 int numOfVertex=ListPoints.Count;
-                //MatrixOfVertex = new int[numOfVertex, numOfVertex, Convert.ToInt32(T_etage.Text)];
+                MatrixOfVertex = new int[numOfVertex, numOfVertex, Convert.ToInt32(T_etage.Text)];
 
                 for (int flo = 0; flo < Convert.ToInt32(T_etage.Text); flo++)
                 {
@@ -1210,12 +1296,18 @@ namespace Calculers
                             //多交线上的点取负值.
                             if(x==y)
                             {
-                               // MatrixOfVertex[x, y, flo] = -1;
+                                MatrixOfVertex[x, y, flo] = -1;
                             }
                             else
                             {
-                                //LineInEtage.IndexOf()
-                                //MatrixOfVertex[x, y, flo] = 0;
+
+                                PointInEtage _searchKey = new PointInEtage(ListPoints[x], ListPoints[y], Convert.ToInt32(Num_Etage.Value));
+                                
+                                if (LineInEtage.IndexOf(_searchKey) != -1)
+                                {
+                                    a = LineInEtage.IndexOf(_searchKey).ToString();
+                                    MessageBox.Show(a + "");
+                                }
                             }
                             
                             
@@ -1223,7 +1315,7 @@ namespace Calculers
                     } 
                 }
                     //treeview2显示
-                    treeView2.Nodes.Clear();
+                    treeView2 .Nodes.Clear();
                 FillTreeView();
             }
             else
