@@ -255,6 +255,7 @@ namespace Calculers
         {
             //窗口关闭时重置_IsShow的值,使窗口可以再次打开
             CalculerLine._IsShow = false;
+            //this.Dispose();
         }
 
 

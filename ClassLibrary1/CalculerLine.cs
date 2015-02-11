@@ -22,25 +22,32 @@ namespace Calculers
             get;
             set;
         }*/
-
+        MainForm form;
         [CommandMethod("Calculateur")]
         public void ModalDialog()
         {         
-            MainForm form = new MainForm();     //创建对话框
+            //MainForm form = new MainForm();     //创建对话框
 
             if (form==null)
             {
                 form = new MainForm();
                 Application.ShowModelessDialog(form);  //显示非模态对话框 
             }
-            else if(form.Visible==false)
+            else if (form.Visible == false && form.IsDisposed == false)
             {
+                //ed.WriteMessage("界面已打开,请勿重复打开..");
+                //form.
                 form.Visible = true;
             }
-            //else
-            //{
-            //    ed.WriteMessage("界面已打开,请勿重复打开..");
-            //}
+            else if (form.IsDisposed == true)
+            {
+                form = new MainForm();
+                Application.ShowModelessDialog(form);  //显示非模态对话框 
+            }
+            else
+            {
+               ed.WriteMessage("界面已打开,请勿重复打开..");
+            }
                 //ed.WriteMessage("111");
                 //if (/*_IsShow == false || !*/form.IsDisposed)
                 /*{
